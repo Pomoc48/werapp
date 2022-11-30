@@ -1,0 +1,1542 @@
+openapi: 3.0.0
+info:
+  version: 1.9.3
+  title: "WerAPI"
+  
+tags:
+  - name: Points
+  - name: Command Logs
+  - name: Events
+  - name: Commands
+  - name: Expenses
+  - name: Users
+  - name: Other
+
+paths:
+  /point:
+    post:
+      tags:
+        - Points
+      summary: "Add user points"
+      description: "Add 1 to user points"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user whose points will be altered"
+          schema:
+            type: integer
+            example: 1
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully given a point"
+
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+                
+    delete:
+      tags:
+        - Points
+      summary: "Remove user points"
+      description: "Subtract 1 from user points"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user whose points will be altered"
+          schema:
+            type: integer
+            example: 1
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully removed a point"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+    
+
+  /command-log:
+    get:
+      tags:
+        - Command Logs
+      summary: "Get command log data"
+      description: "Get recent command log objects"
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get-command-logs'
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+
+    post:
+      tags:
+        - Command Logs
+      summary: "Add new command log"
+      description: "Subtract command cost from user points and add new command log"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user using the command"
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: "command_id"
+          required: true
+          description: "Id of the picked command"
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: "description"
+          required: true
+          description: "Description of the command"
+          schema:
+            type: string
+            example: "Do something bla bla"
+        - in: query
+          name: "recipient_id"
+          required: true
+          description: "Id of the user performing the command"
+          schema:
+            type: integer
+            example: 1
+     
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "The command was used successfully"
+        "400":
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Not enough points"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - "User not found"
+                      - "Command not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+                
+    patch:
+      tags:
+        - Command Logs
+      summary: "Report command not performed"
+      description: "Give other user point penalty worth the command cost"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "command_log_id"
+          required: true
+          description: "Id of the command log"
+          schema:
+            type: integer
+            example: 14
+     
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "The dispute was successful"
+        "400":
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Command already disputed"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Command log not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+    
+                         
+  /event:
+    get:
+      tags:
+        - Events
+      summary: "Get event data"
+      description: "Get latest ongoing event objects"
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get-events'
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+    post:
+      tags:
+        - Events
+      summary: "Add new event"
+      description: "Insert new event to the database"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user adding the event"
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: "timestamp"
+          required: true
+          description: "Finish date of the event"
+          schema:
+            type: string
+            example: "2022-11-12 00:24:48"
+        - in: query
+          name: "description"
+          required: true
+          description: "Description of the event"
+          schema:
+            type: string
+            example: "Event description bla bla"
+     
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Event added successfully"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+
+    delete:
+      tags:
+        - Events
+      summary: "Remove existing event"
+      description: "Remove event from the database"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "event_id"
+          required: true
+          description: "Id of the event"
+          schema:
+            type: integer
+            example: 43
+     
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Event successfully removed"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Event not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+                
+  /command:
+    get:
+      tags:
+        - Commands
+      summary: "Get command data"
+      description: "Get array of command objects"
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get-commands'
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+
+    post:
+      tags:
+        - Commands
+      summary: "Add new command"
+      description: "Insert new command to the database"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user adding the command"
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: "cost"
+          required: true
+          description: "Cost of the command"
+          schema:
+            type: integer
+            example: 20
+        - in: query
+          name: "name"
+          required: true
+          description: "Name of the command"
+          schema:
+            type: string
+            example: "Confession"
+     
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Command category added successfully"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+    
+      
+    put:
+      tags:
+        - Commands
+      summary: "Update existing command"
+      description: "Update command category with new values"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "command_id"
+          required: true
+          description: "Id of the the command"
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user updating the command"
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: "cost"
+          required: true
+          description: "New cost of the command"
+          schema:
+            type: integer
+            example: 20
+        - in: query
+          name: "name"
+          required: true
+          description: "New name of the command"
+          schema:
+            type: string
+            example: "Confession"
+     
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Command category updated successfully"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - "Command category not found"
+                      - "User not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+    
+
+    delete:
+      tags:
+        - Commands
+      summary: "Remove existing command"
+      description: "Remove command from the database"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "command_id"
+          required: true
+          description: "Id of the command"
+          schema:
+            type: integer
+            example: 2
+     
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Command category successfully deleted"
+        "400":
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "This command can't be removed"  
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized' 
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Command category not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+    
+   
+  /expense:
+    get:
+      tags:
+        - Expenses
+      summary: "Get expense data"
+      description: "Get latest expense objects in an array"
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get-expense'
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+
+    post:
+      tags:
+        - Expenses
+      summary: "Add new expense"
+      description: "Insert new expense to the database"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user adding the expense"
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: "recipient_id"
+          required: true
+          description: "Id of the expense recipient"
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: "money"
+          required: true
+          description: "Money value"
+          schema:
+            type: number
+            example: 21.54
+        - in: query
+          name: "description"
+          description: "Description of the expense"
+          schema:
+            type: string
+            example: "Confession"
+        - in: query
+          name: "gift"
+          required: true
+          description: "Is this expense a gift"
+          schema:
+            type: boolean
+            example: false
+     
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Expense added successfully"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - "User not found"
+                      - "Recipient user not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+    
+      
+    patch:
+      tags:
+        - Expenses
+      summary: "Verify existing expense"
+      description: "Update exepnse accepted value"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "expense_id"
+          required: true
+          description: "Id of the expense"
+          schema:
+            type: integer
+            example: 14
+     
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Expense verified successfully"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Expense not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+    
+
+    delete:
+      tags:
+        - Expenses
+      summary: "Remove existing expense"
+      description: "Remove expense from the database"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "expense_id"
+          required: true
+          description: "Id of the expense"
+          schema:
+            type: integer
+            example: 14
+     
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Expense successfully removed" 
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized' 
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Expense not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+    
+                
+  /user:
+    get:
+      tags:
+        - Users
+      summary: "Get user data"
+      description: "Get user objects in an array"
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get-user'
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+                
+    post:
+      tags:
+        - Users
+      summary: "Add user"
+      description: "Insert new user to the database"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "name"
+          required: true
+          description: "Name of the new user"
+          schema:
+            type: string
+            example: "User"
+        - in: query
+          name: "birthdate"
+          required: true
+          description: "Users birthdate"
+          schema:
+            type: string
+            example: "2001-11-12 00:00:00"
+        - in: query
+          name: "pin"
+          required: true
+          description: "User pin"
+          schema:
+            type: string
+            example: "1234"
+        - in: query
+          name: "profile_url"
+          required: true
+          description: "Profile picture url"
+          schema:
+            type: string
+            example: "www.example.com/pictures/front.jpg"
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User added successfully" 
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+                
+    put:
+      tags:
+        - Users
+      summary: "Update user"
+      description: "Update user with new values"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user"
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: "name"
+          required: true
+          description: "Name of the user"
+          schema:
+            type: string
+            example: "User"
+        - in: query
+          name: "pin"
+          required: true
+          description: "User pin"
+          schema:
+            type: string
+            example: "1234"
+        - in: query
+          name: "profile_url"
+          required: true
+          description: "Profile picture url"
+          schema:
+            type: string
+            example: "www.example.com/pictures/front.jpg"
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User updated successfully" 
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+  
+  /login:
+    get:
+      tags:
+        - Other
+      summary: "Verify user credentials"
+      description: "Generate new access token for the user"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user making the request"
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: "pin"
+          required: true
+          description: "Entered pin number"
+          schema:
+            type: string
+            example: "1234"
+        - in: query
+          name: "version"
+          required: true
+          description: "App version making the request"
+          schema:
+            type: string
+            example: "2.27.2"
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/login'
+        "400":
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "App update required"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Wrong PIN number"
+        "404":
+          description: "Not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found"
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+                
+  /home:
+    get:
+      tags:
+        - Other
+      summary: "Get home data"
+      description: "Get home data object"
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user making the request"
+          schema:
+            type: integer
+            example: 1
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get-home'
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+                
+  /stats:
+    get:
+      tags:
+        - Other
+      summary: "Get stats data"
+      description: "Get stats objects in an array"
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get-stats'
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+                
+  /chart:
+    get:
+      tags:
+        - Other
+      summary: "Get charts data"
+      description: "Get chart data object"
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get-charts'
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unauthorized'
+        "5XX":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/server-error'
+                
+  /fcm-token:
+    post:
+      tags:
+        - Other
+      summary: "Update user FCM token"
+      
+      parameters:
+        - in: query
+          name: "user_id"
+          required: true
+          description: "Id of the user"
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: "fcm_token"
+          required: true
+          schema:
+            type: string
+            example: "dzY0kr1lTcy-hu3ktDOuDv:APA91bF9hhJgC..."
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "FCM token updated"
+                
+  /test:
+    post:
+      tags:
+        - Other
+      summary: "Server test"
+      description: "Test valid server backend Url"
+
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Connection successfully established"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Bearer
+
+  schemas:
+    server-error:
+      type: object
+      properties:   
+        message:
+          type: string
+          example: "Something went wrong, try again later"
+
+    unauthorized:
+      type: object
+      properties:   
+        message:
+          type: string
+          enum:
+            - "Invalid access token"
+            - "Expired access token"
+
+    get-command-logs:
+      type: object
+      properties:   
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/command-log'
+
+    get-events:
+      type: object
+      properties:   
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/event'
+                
+    get-commands:
+      type: object
+      properties:   
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 2
+              name:
+                type: string
+                example: "Confession"
+              user_id:
+                type: integer
+                example: 1
+              updated:
+                type: string
+                example: "2022-11-12 00:24:48"
+              cost:
+                type: integer
+                example: 20
+                
+    get-expense:
+      type: object
+      properties:   
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/expense'
+                
+    get-user:
+      type: object
+      properties:   
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 2
+              name:
+                type: string
+                example: "User"
+              profile_url:
+                type: string
+                example: "www.example.com/pictures/front.jpg"
+                
+    login:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 2
+        token:
+          type: string
+          example: "7a42360bb1a1f88825f12947bfd25..."
+        vapid:
+          type: string
+          example: "BKQypoWkO3k4pI_8UcW9dnL4WCfZj..."
+        last_login:
+          type: string
+          example: "2022-11-18 18:59:12"
+                
+    get-home:
+      type: object
+      properties:   
+        data:
+          type: object
+          properties:
+            users:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: "Name"
+                  profile_url:
+                    type: string
+                    example: "www.example.com/pictures/front.jpg"
+                  points:
+                    type: integer
+                    example: 23
+                  winner:
+                    type: boolean
+                    example: true
+                  birthday:
+                    type: boolean
+                    example: false
+            event:
+              $ref: '#/components/schemas/event'
+            expense:
+              $ref: '#/components/schemas/expense'
+            command_log:
+              $ref: '#/components/schemas/command-log'
+            meters:
+              type: array
+              items:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 2
+                  tie:
+                    type: boolean
+                    example: false
+                  winner_id:
+                    type: integer
+                    example: 1
+                  money_left:
+                    type: number
+                    example: 42.62
+                  factor:
+                    type: number
+                    example: 0.4262
+            pending:
+              type: object
+              properties:
+                expenses:
+                  type: integer
+                  example: 2
+
+    get-stats:
+      type: object
+      properties:   
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              user_id:
+                type: integer
+                example: 2
+              total_points:
+                type: integer
+                example: 239
+              used_points:
+                type: integer
+                example: 190
+              used_commands:
+                type: integer
+                example: 6
+              money_gifted:
+                type: number
+                example: 725.74
+              transactions:
+                type: integer
+                example: 25
+                
+    get-charts:
+      type: object
+      properties:   
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              user_id:
+                type: integer
+                example: 2
+              points:
+                type: array
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      value:
+                        type: integer
+                        example: 28
+                      date:
+                        type: string
+                        example: "2022-11-22 14:49:28"
+              total_points:
+                type: array
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      value:
+                        type: integer
+                        example: 218
+                      date:
+                        type: string
+                        example: "2022-11-22 14:49:28"
+       
+    expense:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 140
+        money:
+          type: number
+          example: 12.34
+        timestamp:
+          type: string
+          example: "2022-11-12 01:08:26"
+        user_id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: "Expense description"
+        gift:
+          type: boolean
+          example: false
+        recipient_id:
+          type: integer
+          example: 2
+        accepted:
+          type: boolean
+          example: true
+
+    command-log:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 127
+        timestamp:
+          type: string
+          example: "2022-11-12 01:08:26"
+        description:
+          type: string
+          example: "Command description"
+        command_name:
+          type: string
+          example: "Confession"
+        user_id:
+          type: integer
+          example: 1
+        cost:
+          type: integer
+          example: 20
+        recipient_id:
+          type: integer
+          example: 2
+        reported:
+          type: boolean
+          example: false
+    event:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 127
+        timestamp:
+          type: string
+          example: "2022-11-30 22:00:00"
+        added:
+          type: string
+          example: "2022-11-12 00:24:48"
+        description:
+          type: string
+          example: "Event description"
+        user_id:
+          type: integer
+          example: 1

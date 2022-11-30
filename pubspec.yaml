@@ -1,0 +1,49 @@
+name: wera_f2
+description: The W.E.R.A. Project
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 2.32.4
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.13.4
+  intl: ^0.17.0
+  cupertino_icons: ^1.0.2
+  chart_sparkline: ^1.0.10
+  flutter_fadein: ^2.0.0
+  flutter_launcher_icons: ^0.10.0
+  firebase_messaging: ^14.0.3
+  firebase_core: ^2.1.1
+  flutter_notification_channel: ^2.0.0
+  animated_flip_counter: ^0.2.5
+  package_info_plus: ^3.0.1
+  get: ^4.6.5
+  get_storage: ^2.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.1
+
+flutter_icons:
+  image_path_android: "icons/ic_launcher.png"
+  android: true
+  adaptive_icon_background: "icons/adaptive_bg.png"
+  adaptive_icon_foreground: "icons/adaptive_fg.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "icons/ic_launcher.png"
+    background_color: "#201a1b"
+    theme_color: "#ffb2be"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - profiles/missing.jpg
