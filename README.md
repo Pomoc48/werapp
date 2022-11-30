@@ -19,11 +19,13 @@ Preview of the app displayed on larger screens.
 
 ## Server backend
 
-This app needs a server backend to function, which at this time is not ready to be published yet. The [OpenAPI](https://swagger.io/specification/) specification that this app uses is available in the [backend.yaml](backend.yaml) file.
+This app needs a server backend to function, which at this time is not ready to be published yet.
+The [OpenAPI](https://swagger.io/specification/) specification that this app uses is available in the [backend.yaml](backend.yaml) file.
 
 ## Notifications
 
-This app uses [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) for notification delivery. Every time other users do something in the app that is related to you, you will receive a notification.
+This app uses [Firebase Cloud Messaging](https://firebase.google.com/products/cloud-messaging/) for notification delivery.
+Every time other users do something in the app that is related to you, you will receive a notification.
 
 In the project files there are multiple firebase configuration files.
 
