@@ -75,14 +75,10 @@ class ProfileAvatar extends StatelessWidget {
       );
     }
 
-    return SizedBox(height: 40, width: 40, child: _missing());
+    return _missing();
   }
 
   Widget _missing() {
-    return Image.asset(
-      "profiles/missing.jpg",
-      cacheHeight: 110,
-      cacheWidth: 110,
-    );
+    return const Icon(Icons.account_circle, size: 40);
   }
 }
