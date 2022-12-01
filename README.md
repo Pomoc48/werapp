@@ -27,9 +27,8 @@ The [OpenAPI](https://swagger.io/specification/) specification that this app use
 This app uses [Firebase Cloud Messaging](https://firebase.google.com/products/cloud-messaging/) for notification delivery.
 Every time other users do something in the app that is related to you, you will receive a notification.
 
-In the project files there are multiple firebase configuration files.
-
-These can be manually filled (remove `.themplate` file extension) or generated using the `flutterfire configure` command in this [documentation](https://firebase.google.com/docs/flutter/setup?platform=android).
+The project files are missing multiple firebase configuration files.
+These can be generated using the `flutterfire configure` command in this [documentation](https://firebase.google.com/docs/flutter/setup?platform=android).
 
 ## License
 
