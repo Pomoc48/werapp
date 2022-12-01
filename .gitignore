@@ -50,3 +50,8 @@ lib/firebase_options.dart
 
 # Other builds
 /linux/
+
+# Old icons
+icons/adaptive_bg_old.png
+icons/adaptive_fg_old.png
+icons/ic_launcher_old.png

@@ -59,7 +59,6 @@ void main() async {
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.circularReveal,
       enableLog: false,
-      themeMode: ThemeMode.dark,
       title: PStrings.appName,
       theme: themeLight,
       darkTheme: themeDark,
