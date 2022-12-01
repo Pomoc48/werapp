@@ -30,7 +30,7 @@ class PDropdown extends StatelessWidget {
               elevation: 0,
               itemHeight: 56,
               iconSize: 32,
-              borderRadius: PRadius.card,
+              borderRadius: Settings.cardRadius,
               dropdownColor: PColors().surfaceVar(context),
               underline: Container(height: 0, color: Colors.transparent),
               items: items,

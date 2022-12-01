@@ -35,7 +35,7 @@ class MoneyRatio extends StatelessWidget {
               widthFactor: factor,
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: PRadius.full,
+                  borderRadius: Settings.fullRadius,
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
                 child: const SizedBox(height: 5),
@@ -85,7 +85,7 @@ class MoneyRatio extends StatelessWidget {
 
       return InkWell(
         splashColor: PColors().inkWell(context),
-        borderRadius: PRadius.card,
+        borderRadius: Settings.cardRadius,
         onTap: () async {
           await Navigator.pushNamed(context, Routes.newExpense);
           refresh(true);

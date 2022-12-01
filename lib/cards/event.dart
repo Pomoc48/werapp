@@ -25,7 +25,7 @@ class EventCard extends StatelessWidget {
     Widget drawEvent(Event e) {
       return InkWell(
         splashColor: PColors().inkWell(context),
-        borderRadius: PRadius.card,
+        borderRadius: Settings.cardRadius,
         onTap: () async {
           controller.fadeOut();
           await Get.toNamed(Routes.detailEvent, arguments: {"event": event});
@@ -42,7 +42,7 @@ class EventCard extends StatelessWidget {
       if (event == null) {
         return InkWell(
           splashColor: PColors().inkWell(context),
-          borderRadius: PRadius.card,
+          borderRadius: Settings.cardRadius,
           onTap: () async {
             controller.fadeOut();
             await Get.toNamed(Routes.newEvent);

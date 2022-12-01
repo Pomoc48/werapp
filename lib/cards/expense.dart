@@ -149,7 +149,7 @@ class ExpenseCard extends StatelessWidget {
     else {
       return InkWell(
         splashColor: PColors().inkWell(context),
-        borderRadius: PRadius.card,
+        borderRadius: Settings.cardRadius,
         onTap: () async {
           controller.fadeOut();
           await Get.toNamed(Routes.newExpense);

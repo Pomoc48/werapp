@@ -88,7 +88,7 @@ class AddUser extends StatelessWidget {
         Expanded(
           child: InkWell(
             splashColor: PColors().inkWell(Get.context!),
-            borderRadius: PRadius.card,
+            borderRadius: Settings.cardRadius,
             onTap: () async {
               DateTime now = DateTime.now();
 
@@ -124,7 +124,7 @@ class AddUser extends StatelessWidget {
               controller: local.nameC,
               keyboardType: TextInputType.text,
               textCapitalization: TextCapitalization.sentences,
-              style: PStyles().bLarge(Get.context!),
+              style: Get.textTheme.bodyLarge,
               decoration: InputDecoration(
                 enabledBorder: Settings.noBorder,
                 focusedBorder: Settings.noBorder,
@@ -151,7 +151,7 @@ class AddUser extends StatelessWidget {
               controller: local.imageUrlC,
               keyboardType: TextInputType.text,
               textCapitalization: TextCapitalization.sentences,
-              style: PStyles().bLarge(Get.context!),
+              style: Get.textTheme.bodyLarge,
               decoration: InputDecoration(
                 enabledBorder: Settings.noBorder,
                 focusedBorder: Settings.noBorder,
@@ -174,7 +174,7 @@ class AddUser extends StatelessWidget {
         Expanded(
           child: InkWell(
             splashColor: PColors().inkWell(Get.context!),
-            borderRadius: PRadius.card,
+            borderRadius: Settings.cardRadius,
             onTap: () async {
               local.clearPin();
 

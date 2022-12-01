@@ -24,6 +24,11 @@ class PDrawer extends StatelessWidget {
             .withOpacity(0.14);
       }
 
+      TextStyle? drawerLabel(BuildContext context) {
+        return Theme.of(context).textTheme.apply(
+            bodyColor: PColors().onSecondaryC(context)).labelLarge;
+      }
+
       List<Widget> drawItems() {
         if (badges != null && badges > 0) {
           return [
@@ -33,7 +38,7 @@ class PDrawer extends StatelessWidget {
                   SizedBox(width: Settings.pagePadding),
                   Icon(iconData, color: PColors().onSecondaryC(context)),
                   SizedBox(width: Settings.pagePadding),
-                  Text(label, style: PStyles().drawerLabel(context)),
+                  Text(label, style: drawerLabel(context)),
                 ],
               ),
             ),
@@ -49,14 +54,14 @@ class PDrawer extends StatelessWidget {
           SizedBox(width: Settings.pagePadding),
           Icon(iconData, color: PColors().onSecondaryC(context)),
           SizedBox(width: Settings.pagePadding),
-          Text(label, style: PStyles().drawerLabel(context)),
+          Text(label, style: drawerLabel(context)),
         ];
       }
 
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: InkWell(
-          borderRadius: PRadius.full,
+          borderRadius: Settings.fullRadius,
           onTap: () async {
             if (path == Routes.login) {
               Get.offAllNamed(Routes.login);
@@ -70,7 +75,7 @@ class PDrawer extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: PRadius.full,
+              borderRadius: Settings.fullRadius,
               color: backgroundColor,
             ),
             height: 56,
@@ -87,70 +92,67 @@ class PDrawer extends StatelessWidget {
     Padding listSection(String title) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-        child: Text(title, style: PStyles().tSmall(context)),
+        child: Text(title, style: Get.textTheme.titleSmall),
       );
     }
 
-    return ClipRRect(
-      borderRadius: PRadius.drawer,
-      child: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            SizedBox(height: Settings.pagePadding * 2),
-            listSection("Main"),
-            listTile(
-              iconData: Icons.home,
-              label: PStrings.home,
-              path: Routes.home,
-            ),
-            listTile(
-              iconData: Icons.grade,
-              label: PStrings.commandsLog,
-              path: Routes.commandsLog,
-            ),
-            listTile(
-              iconData: Icons.account_balance_wallet,
-              label: PStrings.expenses,
-              path: Routes.expenses,
-              badges: global.homeData?.pending,
-            ),
-            listTile(
-              iconData: Icons.event,
-              label: PStrings.events,
-              path: Routes.events,
-            ),
-            PDivider(indent: 28, height: Settings.pagePadding),
-            listSection("Insights"),
-            listTile(
-              iconData: Icons.leaderboard,
-              label: PStrings.stats,
-              path: Routes.stats,
-            ),
-            listTile(
-              iconData: Icons.category,
-              label: PStrings.priceList,
-              path: Routes.priceList,
-            ),
-            listTile(
-              iconData: Icons.show_chart,
-              label: PStrings.charts,
-              path: Routes.charts,
-            ),
-            PDivider(indent: 28, height: Settings.pagePadding),
-            listSection("Other"),
-            listTile(
-              iconData: Icons.settings,
-              label: PStrings.settings,
-              path: Routes.settings,
-            ),
-            listTile(
-              iconData: Icons.logout,
-              label: PStrings.logout,
-              path: Routes.login,
-            ),
-          ],
-        ),
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          SizedBox(height: Settings.pagePadding * 2),
+          listSection("Main"),
+          listTile(
+            iconData: Icons.home,
+            label: PStrings.home,
+            path: Routes.home,
+          ),
+          listTile(
+            iconData: Icons.grade,
+            label: PStrings.commandsLog,
+            path: Routes.commandsLog,
+          ),
+          listTile(
+            iconData: Icons.account_balance_wallet,
+            label: PStrings.expenses,
+            path: Routes.expenses,
+            badges: global.homeData?.pending,
+          ),
+          listTile(
+            iconData: Icons.event,
+            label: PStrings.events,
+            path: Routes.events,
+          ),
+          PDivider(indent: 28, height: Settings.pagePadding),
+          listSection("Insights"),
+          listTile(
+            iconData: Icons.leaderboard,
+            label: PStrings.stats,
+            path: Routes.stats,
+          ),
+          listTile(
+            iconData: Icons.category,
+            label: PStrings.priceList,
+            path: Routes.priceList,
+          ),
+          listTile(
+            iconData: Icons.show_chart,
+            label: PStrings.charts,
+            path: Routes.charts,
+          ),
+          PDivider(indent: 28, height: Settings.pagePadding),
+          listSection("Other"),
+          listTile(
+            iconData: Icons.settings,
+            label: PStrings.settings,
+            path: Routes.settings,
+          ),
+          listTile(
+            iconData: Icons.logout,
+            label: PStrings.logout,
+            path: Routes.login,
+          ),
+        ],
       ),
     );
   }

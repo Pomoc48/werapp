@@ -138,7 +138,7 @@ class SettingsPage extends StatelessWidget {
               controller: local.nameController,
               keyboardType: TextInputType.text,
               textCapitalization: TextCapitalization.words,
-              style: PStyles().bLarge(Get.context!),
+              style: Get.textTheme.bodyLarge,
               decoration: InputDecoration(
                 enabledBorder: Settings.noBorder,
                 focusedBorder: Settings.noBorder,
@@ -161,7 +161,7 @@ class SettingsPage extends StatelessWidget {
         Expanded(
           child: InkWell(
             splashColor: PColors().inkWell(Get.context!),
-            borderRadius: PRadius.card,
+            borderRadius: Settings.cardRadius,
             onTap: () async {
               local.clearPin();
 
@@ -204,7 +204,7 @@ class SettingsPage extends StatelessWidget {
               controller: local.imageController,
               keyboardType: TextInputType.text,
               textCapitalization: TextCapitalization.sentences,
-              style: PStyles().bLarge(Get.context!),
+              style: Get.textTheme.bodyLarge,
               decoration: InputDecoration(
                 enabledBorder: Settings.noBorder,
                 focusedBorder: Settings.noBorder,
@@ -229,7 +229,7 @@ class SettingsPage extends StatelessWidget {
         Expanded(
           child: InkWell(
             splashColor: PColors().inkWell(Get.context!),
-            borderRadius: PRadius.card,
+            borderRadius: Settings.cardRadius,
             onTap: () async {
               await showDialog(
                 context: Get.context!,
@@ -306,7 +306,7 @@ class SettingsPage extends StatelessWidget {
   Widget _themeOptionItem(Color color, String name) {
     return InkWell(
       splashColor: PColors().inkWell(Get.context!),
-      borderRadius: PRadius.card,
+      borderRadius: Settings.cardRadius,
       onTap: () {
         local.updateColor(color, name);
         Get.back();

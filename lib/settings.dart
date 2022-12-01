@@ -11,16 +11,9 @@ class Settings {
   static UnderlineInputBorder noBorder = const UnderlineInputBorder(
     borderSide: BorderSide(width: 0, color: Colors.transparent),
   );
-}
 
-class PRadius {
-  static BorderRadius card = BorderRadius.circular(12);
-  static BorderRadius full = BorderRadius.circular(999);
-
-  static BorderRadius drawer = const BorderRadius.only(
-    topRight: Radius.circular(16),
-    bottomRight: Radius.circular(16),
-  );
+  static BorderRadius cardRadius = BorderRadius.circular(12);
+  static BorderRadius fullRadius = BorderRadius.circular(999);
 }
 
 class PStyles {
@@ -35,18 +28,20 @@ class PStyles {
         displayColor: Theme.of(context).colorScheme.primary,
         bodyColor: Theme.of(context).colorScheme.primary);
   }
+}
 
-  TextStyle? drawerLabel(BuildContext context) {
-    return Theme.of(context).textTheme.apply(
-        bodyColor: PColors().onSecondaryC(context)).labelLarge;
+class PColors {
+  Color surfaceVar(BuildContext context) {
+    return Theme.of(context).colorScheme.surfaceVariant;
   }
 
-  TextStyle bLarge(BuildContext context) {
-    return Theme.of(context).textTheme.bodyLarge!;
+  Color onSecondaryC(BuildContext context) {
+    return Theme.of(context).colorScheme.onSecondaryContainer;
   }
 
-  TextStyle tSmall(BuildContext context) {
-    return Theme.of(context).textTheme.titleSmall!;
+  /// InkWell's splash color
+  Color inkWell(BuildContext context) {
+    return Theme.of(context).colorScheme.onTertiaryContainer.withOpacity(0.25);
   }
 }
 
@@ -67,24 +62,4 @@ class Routes {
   static String newPriceList = '/new-price-list';
   static String newUser = '/new-user';
   static String settings = '/settings';
-}
-
-class PColors {
-  Color surfaceVar(BuildContext context) {
-    return Theme.of(context).colorScheme.surfaceVariant;
-  }
-
-  Color onSecondaryC(BuildContext context) {
-    return Theme.of(context).colorScheme.onSecondaryContainer;
-  }
-
-  /// InkWell's splash color
-  Color inkWell(BuildContext context) {
-    return Theme.of(context).colorScheme.onTertiaryContainer.withOpacity(0.25);
-  }
-
-  /// Material 3 secondary container color with 0.25 opacity
-  Color card(BuildContext context) {
-    return Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.25);
-  }
 }

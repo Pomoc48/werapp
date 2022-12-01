@@ -74,7 +74,7 @@ class PriceListPage extends StatelessWidget {
       widgets.add(
         InkWell(
           splashColor: PColors().inkWell(Get.context!),
-          borderRadius: PRadius.card,
+          borderRadius: Settings.cardRadius,
           onTap: () async => _view(command),
             child: CreateCard(
               main: [command.name, command.cost.toString()],

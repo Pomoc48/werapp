@@ -56,7 +56,7 @@ class CurrentPoints extends StatelessWidget {
       if (user.id != global.userId) {
         return InkWell(
           splashColor: PColors().inkWell(context),
-          borderRadius: PRadius.card,
+          borderRadius: Settings.cardRadius,
           onTap: () => operation(user, true),
           onLongPress: () => operation(user, false),
           child: CreateCard(

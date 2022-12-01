@@ -121,7 +121,7 @@ class LoginPage extends StatelessWidget {
             );
           },
           splashColor: PColors().inkWell(Get.context!),
-          borderRadius: PRadius.card,
+          borderRadius: Settings.cardRadius,
           child: CreateCard(main: ProfileAvatar(userId: user.id)),
         ),
       );

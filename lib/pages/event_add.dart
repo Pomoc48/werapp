@@ -72,7 +72,7 @@ class AddEventPage extends StatelessWidget {
         Expanded(
           child: InkWell(
             splashColor: PColors().inkWell(Get.context!),
-            borderRadius: PRadius.card,
+            borderRadius: Settings.cardRadius,
             onTap: () async {
               DateTime? date = await showDatePicker(
                 context: Get.context!,
@@ -111,7 +111,7 @@ class AddEventPage extends StatelessWidget {
         controller: local.controller,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.sentences,
-        style: PStyles().bLarge(Get.context!),
+        style: Get.textTheme.bodyLarge,
         decoration: InputDecoration(
           enabledBorder: Settings.noBorder,
           focusedBorder: Settings.noBorder,

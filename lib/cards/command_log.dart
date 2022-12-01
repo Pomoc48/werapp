@@ -93,7 +93,7 @@ class CommandLogCard extends StatelessWidget {
 
     return InkWell(
       splashColor: PColors().inkWell(context),
-      borderRadius: PRadius.card,
+      borderRadius: Settings.cardRadius,
       onTap: () async {
         controller.fadeOut();
         await Navigator.pushNamed(context, Routes.newCommand);

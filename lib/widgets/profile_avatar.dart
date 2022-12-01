@@ -27,7 +27,7 @@ class ProfileAvatar extends StatelessWidget {
       return Row(
         children: [
           ClipRRect(
-            borderRadius: PRadius.full,
+            borderRadius: Settings.fullRadius,
             child: _image(user.profileUrl),
           ),
           SizedBox(width: Settings.pagePadding),
@@ -47,7 +47,10 @@ class ProfileAvatar extends StatelessWidget {
 
     return Row(
       children: [
-        ClipRRect(borderRadius: PRadius.full, child: _image(user.profileUrl)),
+        ClipRRect(
+          borderRadius: Settings.fullRadius,
+          child: _image(user.profileUrl),
+        ),
         SizedBox(width: Settings.pagePadding),
         Text(user.name, style: PStyles().onSurface(context).bodyLarge),
       ],
