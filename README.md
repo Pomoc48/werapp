@@ -6,7 +6,7 @@ The project has grown to be more than just about the game and also includes a wa
 
 ## The game
 
-Rules of the game are simple. Every time someone is nice to you, did something good or some other meritorious thing, you give them a point.
+Rules of the game are simple. Every time someone is nice to you or did something good in general, you give them a point.
 Once you have enough points, you can spend them on a command for the other user.
 
 ## Application
@@ -29,6 +29,8 @@ Every time other users do something in the app that is related to you, you will 
 
 The project files are missing multiple firebase configuration files.
 These can be generated using the `flutterfire configure` command in this [documentation](https://firebase.google.com/docs/flutter/setup?platform=android).
+
+If you don't care about notifications, app can be successfully built without Firebase configuring.
 
 ## License
 
