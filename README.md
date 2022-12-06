@@ -30,7 +30,7 @@ Every time other users do something in the app that is related to you, you will 
 The project files are missing multiple firebase configuration files.
 These can be generated using the `flutterfire configure` command in this [documentation](https://firebase.google.com/docs/flutter/setup?platform=android).
 
-If you don't care about notifications, app can be successfully built without Firebase configuring.
+If you don't care about notifications, app can be successfully built without configuring Firebase.
 
 ## License
 
