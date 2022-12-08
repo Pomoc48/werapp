@@ -49,6 +49,8 @@ class AddEventPage extends StatelessWidget {
       title: PStrings.newEventTitle,
       fab: fab,
       child: WidgetFromList(
+        contextWidth: context.width,
+        forceSingle: true,
         children: [_timeInput(), _descriptionInput()],
       ),
     );

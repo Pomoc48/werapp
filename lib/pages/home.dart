@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
       onRefresh: () => _getHome(true),
       welcome: Obx(() => _getTitle(global.homeData, global.userId!)),
       child: WidgetFromList(
-        twoColumns: context.width > 999,
+        contextWidth: context.width,
         children: [
           TitleWidget(
             text: PStrings.currentPoints,

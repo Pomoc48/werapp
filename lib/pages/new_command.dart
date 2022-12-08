@@ -58,7 +58,11 @@ class NewCommandPage extends StatelessWidget {
     return PLayout(
       title: PStrings.newCommand,
       fab: fab,
-      child: Obx(() => WidgetFromList(children: _main(global.commands))),
+      child: Obx(() => WidgetFromList(
+        contextWidth: context.width,
+        forceSingle: true,
+        children: _main(global.commands),
+      )),
     );
   }
 

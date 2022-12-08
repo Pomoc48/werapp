@@ -50,7 +50,10 @@ class PriceListPage extends StatelessWidget {
       scrollable: true,
       onRefresh: () async => _getCommands(),
       fab: fab,
-      child: Obx(() => WidgetFromList(children: _main(global.commands))),
+      child: Obx(() => WidgetFromList(
+        contextWidth: context.width,
+        children: _main(global.commands),
+      )),
     );
   }
 

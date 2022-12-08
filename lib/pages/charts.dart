@@ -44,7 +44,10 @@ class ChartsPage extends StatelessWidget {
       logoutConfirm: true,
       onRefresh: () async => _getCharts(context),
       scrollable: true,
-      child: Obx(() => WidgetFromList(children: _main(global.charts))),
+      child: Obx(() => WidgetFromList(
+        contextWidth: context.width,
+        children: _main(global.charts),
+      )),
     );
   }
 

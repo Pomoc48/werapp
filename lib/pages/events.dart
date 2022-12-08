@@ -53,7 +53,10 @@ class EventsPage extends StatelessWidget {
       logoutConfirm: true,
       scrollable: true,
       onRefresh: () async => _getEvents(),
-      child: Obx(() => WidgetFromList(children: _main(global.events))),
+      child: Obx(() => WidgetFromList(
+        contextWidth: context.width,
+        children: _main(global.events),
+      )),
     );
   }
 

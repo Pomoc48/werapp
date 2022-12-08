@@ -44,6 +44,8 @@ class Setup extends StatelessWidget {
       backArrow: false,
       fab: fab,
       child: WidgetFromList(
+        contextWidth: context.width,
+        forceSingle: true,
         children: [
           PTitle(message: PStrings.appSetupThing),
           PPadding(widget: Text(PStrings.appSetupMessage)),

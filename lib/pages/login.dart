@@ -52,7 +52,11 @@ class LoginPage extends StatelessWidget {
       welcome: PTitle(message: PStrings.chooseUser),
       scrollable: true,
       onRefresh: () async => _getUsers(),
-      child: Obx(() => WidgetFromList(children: _main(global.users))),
+      child: Obx(() => WidgetFromList(
+        contextWidth: context.width,
+        forceSingle: true,
+        children: _main(global.users),
+      )),
     );
   }
 

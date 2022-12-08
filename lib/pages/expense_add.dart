@@ -47,6 +47,8 @@ class AddExpensePage extends StatelessWidget {
       title: PStrings.newExpense,
       fab: fab,
       child: WidgetFromList(
+        contextWidth: context.width,
+        forceSingle: true,
         children: [
           _priceInput(),
           _userSelect(),

@@ -49,7 +49,10 @@ class StatsPage extends StatelessWidget {
       scrollable: true,
       logoutConfirm: true,
       onRefresh: () async => _getStats(),
-      child: Obx(() => WidgetFromList(children: _main(global.stats))),
+      child: Obx(() => WidgetFromList(
+        contextWidth: context.width,
+        children: _main(global.stats),
+      )),
     );
   }
 

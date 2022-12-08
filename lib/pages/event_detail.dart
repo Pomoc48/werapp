@@ -66,6 +66,8 @@ class DetailedEventPage extends StatelessWidget {
         message: "${local.diff.value.inHours} ${PStrings.hoursLeft}",
       )),
       child: WidgetFromList(
+        contextWidth: context.width,
+        forceSingle: true,
         children: [
           Obx(() => _progressBar(
             title: PStrings.days,

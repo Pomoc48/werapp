@@ -5,11 +5,13 @@ class WidgetFromList extends StatelessWidget {
   const WidgetFromList({
     super.key,
     required this.children,
-    this.twoColumns = false,
+    required this.contextWidth,
+    this.forceSingle = false,
   });
 
   final List<Widget> children;
-  final bool twoColumns;
+  final double contextWidth;
+  final bool forceSingle;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class WidgetFromList extends StatelessWidget {
       );
     }
 
-    if (twoColumns) {
+    if (contextWidth > 999) {
       List<Widget> wL = [];
       List<Widget> wR = [];
 

@@ -61,7 +61,11 @@ class NewPriceListPage extends StatelessWidget {
     return PLayout(
       title: pageTitle,
       fab: fab,
-      child: WidgetFromList(children: _main()),
+      child: WidgetFromList(
+        contextWidth: context.width,
+        forceSingle: true,
+        children: _main(),
+      ),
     );
   }
 

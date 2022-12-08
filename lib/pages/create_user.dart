@@ -60,6 +60,8 @@ class AddUser extends StatelessWidget {
       backArrow: Get.arguments["leading"],
       fab: fab,
       child: WidgetFromList(
+        contextWidth: context.width,
+        forceSingle: true,
         children: [
           _nameInput(),
           _pinInput(),

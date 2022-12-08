@@ -53,7 +53,10 @@ class ExpensesPage extends StatelessWidget {
       scrollable: true,
       onRefresh: () async => _getExpenses(),
       fab: fab,
-      child: Obx(() => WidgetFromList(children: _main(global.expenses))),
+      child: Obx(() => WidgetFromList(
+        contextWidth: context.width,
+        children: _main(global.expenses),
+      )),
     );
   }
 
