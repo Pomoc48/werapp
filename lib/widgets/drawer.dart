@@ -4,9 +4,12 @@ import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/divider.dart';
+import 'package:wera_f2/widgets/padding.dart';
 
 class PDrawer extends StatelessWidget {
-  const PDrawer({super.key});
+  const PDrawer({super.key, this.fab});
+
+  final Widget? fab;
 
   @override
   Widget build(BuildContext context) {
@@ -78,16 +81,12 @@ class PDrawer extends StatelessWidget {
               borderRadius: Settings.fullRadius,
               color: backgroundColor,
             ),
-            height: 56,
-            child: Row(
-              children: drawItems(),
-            ),
+            height: 48,
+            child: Row(children: drawItems()),
           ),
         ),
       );
     }
-
-
 
     Padding listSection(String title) {
       return Padding(
@@ -96,61 +95,75 @@ class PDrawer extends StatelessWidget {
       );
     }
 
+    Widget fabButton() {
+      if (fab != null) return PPadding(widget: fab!);
+      return const SizedBox();
+    }
+
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: Settings.pagePadding * 2),
-          listSection("Main"),
-          listTile(
-            iconData: Icons.home,
-            label: PStrings.home,
-            path: Routes.home,
-          ),
-          listTile(
-            iconData: Icons.grade,
-            label: PStrings.commandsLog,
-            path: Routes.commandsLog,
-          ),
-          listTile(
-            iconData: Icons.account_balance_wallet,
-            label: PStrings.expenses,
-            path: Routes.expenses,
-            badges: global.homeData?.pending,
-          ),
-          listTile(
-            iconData: Icons.event,
-            label: PStrings.events,
-            path: Routes.events,
-          ),
-          PDivider(indent: 28, height: Settings.pagePadding),
-          listSection("Insights"),
-          listTile(
-            iconData: Icons.leaderboard,
-            label: PStrings.stats,
-            path: Routes.stats,
-          ),
-          listTile(
-            iconData: Icons.category,
-            label: PStrings.priceList,
-            path: Routes.priceList,
-          ),
-          listTile(
-            iconData: Icons.show_chart,
-            label: PStrings.charts,
-            path: Routes.charts,
-          ),
-          PDivider(indent: 28, height: Settings.pagePadding),
-          listSection("Other"),
-          listTile(
-            iconData: Icons.settings,
-            label: PStrings.settings,
-            path: Routes.settings,
-          ),
-          listTile(
-            iconData: Icons.logout,
-            label: PStrings.logout,
-            path: Routes.login,
+          fabButton(),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                SizedBox(height: Settings.pagePadding),
+                listSection("Main"),
+                listTile(
+                  iconData: Icons.home,
+                  label: PStrings.home,
+                  path: Routes.home,
+                ),
+                listTile(
+                  iconData: Icons.grade,
+                  label: PStrings.commandsLog,
+                  path: Routes.commandsLog,
+                ),
+                listTile(
+                  iconData: Icons.account_balance_wallet,
+                  label: PStrings.expenses,
+                  path: Routes.expenses,
+                  badges: global.homeData?.pending,
+                ),
+                listTile(
+                  iconData: Icons.event,
+                  label: PStrings.events,
+                  path: Routes.events,
+                ),
+                PDivider(indent: 28, height: Settings.pagePadding),
+                listSection("Insights"),
+                listTile(
+                  iconData: Icons.leaderboard,
+                  label: PStrings.stats,
+                  path: Routes.stats,
+                ),
+                listTile(
+                  iconData: Icons.category,
+                  label: PStrings.priceList,
+                  path: Routes.priceList,
+                ),
+                listTile(
+                  iconData: Icons.show_chart,
+                  label: PStrings.charts,
+                  path: Routes.charts,
+                ),
+                PDivider(indent: 28, height: Settings.pagePadding),
+                listSection("Other"),
+                listTile(
+                  iconData: Icons.settings,
+                  label: PStrings.settings,
+                  path: Routes.settings,
+                ),
+                listTile(
+                  iconData: Icons.logout,
+                  label: PStrings.logout,
+                  path: Routes.login,
+                ),
+                SizedBox(height: Settings.pagePadding * 2),
+              ],
+            ),
           ),
         ],
       ),

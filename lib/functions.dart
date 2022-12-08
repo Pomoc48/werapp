@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:wera_f2/classes/user.dart';
-import 'package:wera_f2/settings.dart';
-import 'package:wera_f2/strings.dart';
-import 'package:wera_f2/layouts/desktop.dart';
-import 'package:wera_f2/layouts/mobile.dart';
-import 'package:wera_f2/layouts/tablet.dart';
 
 String formatDouble(double n, int format) {
   return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : format);
@@ -25,11 +20,11 @@ double parseDouble(value) {
   }
 }
 
-void snackBar(BuildContext context, String text, [SnackBarAction? action]) {
+void snackBar(BuildContext context, String text) {
   final snackBar = SnackBar(
     behavior: SnackBarBehavior.floating,
+    margin: context.width > 600 ? EdgeInsets.fromLTRB(20, 0, context.width - 600, 20) : null,
     content: Text(text),
-    action: action,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
@@ -46,57 +41,6 @@ bool isMobile(BoxConstraints constraints) {
 Widget? drawDrawer(BoxConstraints constraints, Widget child) {
   if (isMobile(constraints)) return child;
   return null;
-}
-
-Widget getLayout({
-  required BoxConstraints constraints,
-  required List<Widget> children,
-  Widget? welcome,
-  bool? drawer,
-}) {
-  if (constraints.maxWidth < 600) {
-    return MobileView(
-      welcome: welcome,
-      children: children,
-    );
-  }
-
-  if (constraints.maxWidth < 1000) {
-    return TabletView(
-      drawer: drawer,
-      welcome: welcome,
-      children: children,
-    );
-  }
-
-  return DesktopView(
-    drawer: drawer,
-    welcome: welcome,
-    children: children,
-  );
-}
-
-Future<bool> logoutConfirm(BuildContext context) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(PStrings.logout),
-        content: Text(PStrings.logoutConfirm),
-        actions: [
-          TextButton(
-            child: Text(PStrings.no),
-            onPressed: () => Get.back(),
-          ),
-          TextButton(
-            child: Text(PStrings.yes),
-            onPressed:() => Get.offAllNamed(Routes.login),
-          ),
-        ],
-      );
-    },
-  );
-  return false;
 }
 
 void loading(BuildContext context) {

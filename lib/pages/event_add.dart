@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
-import 'package:wera_f2/layouts/single_column.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/create_card.dart';
 import 'package:wera_f2/widgets/input_container.dart';
 import 'package:wera_f2/widgets/padding.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(AddEventPage());
 
@@ -37,28 +37,22 @@ class AddEventPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(PStrings.newEventTitle),
-      ),
-      body: FadeIn(child: _mainSection()),
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: "main",
-        onPressed: () => _buttonPressed(),
-        icon: const Icon(Icons.check),
-        label: Text(PStrings.confirmFAB),
-      ),
-    );
-  }
 
-  Widget _mainSection() {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return SingleColumn(
-          constraints: constraints,
-          children: [_timeInput(), _descriptionInput()],
-        );
-      },
+    FloatingActionButton fab = FloatingActionButton.extended(
+      heroTag: "main",
+      onPressed: () => _buttonPressed(),
+      icon: const Icon(Icons.check),
+      label: Text(PStrings.confirmFAB),
+    );
+
+    return PLayout(
+      title: PStrings.newEventTitle,
+      fab: fab,
+      child: WidgetFromList(
+        contextWidth: context.width,
+        forceSingle: true,
+        children: [_timeInput(), _descriptionInput()],
+      ),
     );
   }
 

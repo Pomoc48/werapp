@@ -4,14 +4,16 @@ import 'package:wera_f2/settings.dart';
 class MobileView extends StatelessWidget {
   const MobileView({
     Key? key,
-    required this.children,
+    required this.child,
     this.welcome,
-    this.noScroll,
+    this.scrollable = false,
+    this.onRefresh,
   }) : super(key: key);
 
-  final List<Widget> children;
+  final Widget child;
   final Widget? welcome;
-  final bool? noScroll;
+  final bool scrollable;
+  final Future<void> Function()? onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -23,36 +25,42 @@ class MobileView extends StatelessWidget {
       widgets.add(SizedBox(height: Settings.pagePadding));
     }
 
-    for (int a = 0; a < children.length; a++) {
-      widgets.add(children[a]);
-      if (a != children.length - 1) {
-        widgets.add(SizedBox(height: Settings.pagePadding / 2));
-      }
-    }
+    widgets.add(child);
 
     if (Scaffold.of(context).hasFloatingActionButton) {
       widgets.add(const SizedBox(height: 72));
     }
 
-    if (noScroll is bool && noScroll!) {
-      return Padding(
+    return _getScroll(
+      Padding(
         padding: EdgeInsets.all(Settings.pagePadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: widgets,
-        ),
-      );
-    }
-
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Padding(
-        padding: EdgeInsets.all(Settings.pagePadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: widgets,
         ),
       ),
     );
+  }
+
+  Widget _getScroll(Widget widget) {
+    if (scrollable) {
+      if (onRefresh != null) {
+        return RefreshIndicator(
+          onRefresh: onRefresh!,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: widget,
+          ),
+        );
+      }
+
+      return SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: widget,
+      );
+    }
+
+    return widget;
   }
 }

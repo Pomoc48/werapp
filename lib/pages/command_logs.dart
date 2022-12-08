@@ -4,11 +4,12 @@ import 'package:get/get.dart';
 import 'package:wera_f2/classes/command_log.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
+import 'package:wera_f2/layouts/layout.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/cards/command_log.dart';
-import 'package:wera_f2/widgets/drawer.dart';
 
 void main() => runApp(CommandLogPage());
 
@@ -34,41 +35,34 @@ class CommandLogPage extends StatelessWidget {
   Widget build(BuildContext context) {
     local.runOnce(() => _getCommandLogs());
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints c) {
-        return WillPopScope(
-          onWillPop: () async => await logoutConfirm(context),
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(PStrings.commandsLog),
-              automaticallyImplyLeading: isMobile(c),
-            ),
-            drawer: drawDrawer(c, const PDrawer()),
-            floatingActionButton: FloatingActionButton.extended(
-              heroTag: "main",
-              onPressed: () async {
-                local.controller.fadeOut();
-                await Navigator.pushNamed(context, Routes.newCommand);
-                _getCommandLogs();
-              },
-              label: Text(PStrings.newCommandFAB),
-              icon: const Icon(Icons.grade),
-            ),
-            body: RefreshIndicator(
-              onRefresh: () async => _getCommandLogs(),
-              child: FadeIn(
-                controller: local.controller,
-                child: Obx(() => _mainColumn(c, global.commandsLog)),
-              ),
-            ),
-          ),
-        );
+    FloatingActionButton fab = FloatingActionButton.extended(
+      heroTag: "main",
+      onPressed: () async {
+        local.controller.fadeOut();
+        await Navigator.pushNamed(context, Routes.newCommand);
+        _getCommandLogs();
       },
+      label: Text(PStrings.newCommandFAB),
+      icon: const Icon(Icons.grade),
+    );
+
+    return PLayout(
+      title: PStrings.commandsLog,
+      drawer: true,
+      fab: fab,
+      scrollable: true,
+      logoutConfirm: true,
+      fadeController: local.controller,
+      onRefresh: () async => _getCommandLogs(),
+      child: Obx(() => WidgetFromList(
+        contextWidth: context.width,
+        children: _main(global.commandsLog),
+      )),
     );
   }
 
-  Widget _mainColumn(BoxConstraints constraints, List<CommandLog>? data) {
-    if (data == null) return const SizedBox();
+  List<Widget> _main(List<CommandLog>? data) {
+    if (data == null) return [];
 
     List<Widget> widgets = [];
     for (CommandLog commandLog in data) {
@@ -79,11 +73,7 @@ class CommandLogPage extends StatelessWidget {
       ));
     }
 
-    return getLayout(
-      constraints: constraints,
-      drawer: !isMobile(constraints),
-      children: widgets,
-    );
+    return widgets;
   }
 
   Future<void> _getCommandLogs() async {

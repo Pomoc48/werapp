@@ -5,12 +5,13 @@ import 'package:wera_f2/classes/command.dart';
 import 'package:wera_f2/classes/user.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
-import 'package:wera_f2/layouts/single_column.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/dropdown.dart';
 import 'package:wera_f2/widgets/input_container.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(NewCommandPage());
 
@@ -47,32 +48,28 @@ class NewCommandPage extends StatelessWidget {
   Widget build(BuildContext context) {
     local.runOnce(() => _getCommands());
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints c) {
-        return Scaffold(
-          appBar: AppBar(title: Text(PStrings.newCommand)),
-          floatingActionButton: FloatingActionButton.extended(
-            heroTag: "main",
-            onPressed: _add,
-            icon: const Icon(Icons.check),
-            label: Text(PStrings.confirmFAB),
-          ),
-          body: FadeIn(
-            controller: local.fadeController,
-            child: Obx(() => _mainSection(c)),
-          ),
-        );
-      },
+    FloatingActionButton fab = FloatingActionButton.extended(
+      heroTag: "main",
+      onPressed: _add,
+      icon: const Icon(Icons.check),
+      label: Text(PStrings.confirmFAB),
+    );
+
+    return PLayout(
+      title: PStrings.newCommand,
+      fab: fab,
+      fadeController: local.fadeController,
+      child: Obx(() => WidgetFromList(
+        contextWidth: context.width,
+        forceSingle: true,
+        children: _main(global.commands),
+      )),
     );
   }
 
-  Widget _mainSection(BoxConstraints constraints) {
-    if (global.commands == null) return const SizedBox();
-
-    return SingleColumn(
-      constraints: constraints,
-      children: [_categorySelect(), _userSelect(), _descriptionInput()],
-    );
+  List<Widget> _main(List<Command>? commands) {
+    if (commands == null) return [];
+    return [_categorySelect(), _userSelect(), _descriptionInput()];
   }
 
   Widget _categorySelect() {

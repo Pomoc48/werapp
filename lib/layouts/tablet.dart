@@ -5,14 +5,20 @@ import 'package:wera_f2/widgets/drawer.dart';
 class TabletView extends StatelessWidget {
   const TabletView({
     Key? key,
-    required this.children,
-    this.drawer,
+    required this.child,
+    this.drawer = false,
     this.welcome,
+    this.fab,
+    this.scrollable = false,
+    this.onRefresh,
   }) : super(key: key);
 
-  final List<Widget> children;
-  final bool? drawer;
+  final Widget child;
+  final bool drawer;
   final Widget? welcome;
+  final Widget? fab;
+  final bool scrollable;
+  final Future<void> Function()? onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -24,40 +30,50 @@ class TabletView extends StatelessWidget {
       widgets.add(SizedBox(height: Settings.pagePadding));
     }
 
-    for (int a = 0; a < children.length; a++) {
-      widgets.add(children[a]);
-      if (a != children.length - 1) {
-        widgets.add(SizedBox(height: Settings.pagePadding));
-      }
-    }
+    widgets.add(child);
 
-    if (Scaffold.of(context).hasFloatingActionButton) {
-      widgets.add(const SizedBox(height: 72));
-    }
-
-    Widget finalWidgets = Padding(
-      padding: EdgeInsets.all(Settings.pagePadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: widgets,
+    Widget finalWidgets = _getScroll(
+      Padding(
+        padding: EdgeInsets.all(Settings.pagePadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: widgets,
+        ),
       ),
     );
 
-    if (drawer is bool && drawer!) {
+    if (drawer) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(width: 260, child: PDrawer()),
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: finalWidgets,
-            ),
-          ),
+          SizedBox(width: 260, child: PDrawer(fab: fab)),
+          Expanded(child: finalWidgets),
         ],
       );
     }
 
     return finalWidgets;
+  }
+
+  Widget _getScroll(Widget widget) {
+    if (scrollable) {
+      if (onRefresh != null) {
+        return RefreshIndicator(
+          onRefresh: onRefresh!,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: widget,
+          ),
+        );
+      }
+
+      return SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: widget,
+      );
+    }
+
+    return widget;
   }
 }

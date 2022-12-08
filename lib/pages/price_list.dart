@@ -5,11 +5,12 @@ import 'package:wera_f2/classes/command.dart';
 import 'package:wera_f2/classes/user.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/create_card.dart';
-import 'package:wera_f2/widgets/drawer.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(PriceListPage());
 
@@ -35,34 +36,30 @@ class PriceListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     local.runOnce(() => _getCommands());
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints c) {
-        return WillPopScope(
-          onWillPop: () async => await logoutConfirm(context),
-          child: Scaffold(
-            appBar: AppBar(title: Text(PStrings.priceList)),
-            drawer: drawDrawer(c, const PDrawer()),
-            floatingActionButton: FloatingActionButton.extended(
-              heroTag: "main",
-              onPressed: () async => _view(null),
-              icon: const Icon(Icons.category),
-              label: Text(PStrings.newCategoryFAB),
-            ),
-            body: RefreshIndicator(
-              onRefresh: () async => _getCommands(),
-              child: FadeIn(
-                controller: local.fadeController,
-                child: Obx(() => _mainSection(c, global.commands)),
-              ),
-            ),
-          ),
-        );
-      },
+    FloatingActionButton fab = FloatingActionButton.extended(
+      heroTag: "main",
+      onPressed: () async => _view(null),
+      icon: const Icon(Icons.category),
+      label: Text(PStrings.newCategoryFAB),
+    );
+
+    return PLayout(
+      title: PStrings.priceList,
+      drawer: true,
+      logoutConfirm: true,
+      scrollable: true,
+      fadeController: local.fadeController,
+      onRefresh: () async => _getCommands(),
+      fab: fab,
+      child: Obx(() => WidgetFromList(
+        contextWidth: context.width,
+        children: _main(global.commands),
+      )),
     );
   }
 
-  Widget _mainSection(BoxConstraints constraints, List<Command>? data) {
-    if (data == null) return const SizedBox();
+  List<Widget> _main(List<Command>? data) {
+    if (data == null) return [];
 
     List<Widget> widgets = [];
     for (Command command in data) {
@@ -84,11 +81,7 @@ class PriceListPage extends StatelessWidget {
       );
     }
 
-    return getLayout(
-      constraints: constraints,
-      drawer: !isMobile(constraints),
-      children: widgets,
-    );
+    return widgets;
   }
 
   void _view(Command? command) async {
