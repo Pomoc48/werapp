@@ -23,7 +23,7 @@ class CommandLog {
 
   Future<Map> report() async {
     return await query(
-      link: "command_log",
+      link: "command-log",
       type: RequestType.patch,
       params: {"command_log_id": id},
     );

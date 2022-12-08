@@ -140,7 +140,7 @@ class NewCommandPage extends StatelessWidget {
     loading(Get.context!);
 
     Map map = await query(
-      link: "command_log",
+      link: "command-log",
       type: RequestType.post,
       params: {
         "user_id": global.userId!,
