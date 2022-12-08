@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:wera_f2/functions.dart';
@@ -32,37 +33,36 @@ class Setup extends StatelessWidget {
       icon: const Icon(Icons.wifi_find),
     );
 
-    // TODO: fix WillPopScope
-
-    // onWillPop: () async {
-    //   SystemNavigator.pop();
-    //   return false;
-    // },
-
-    return PLayout(
-      title: PStrings.setup,
-      backArrow: false,
-      fab: fab,
-      child: WidgetFromList(
-        contextWidth: context.width,
-        forceSingle: true,
-        children: [
-          PTitle(message: PStrings.appSetupThing),
-          PPadding(widget: Text(PStrings.appSetupMessage)),
-          InputContainer(
-            widget: TextField(
-              controller: local.textController,
-              keyboardType: TextInputType.text,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                enabledBorder: Settings.noBorder,
-                focusedBorder: Settings.noBorder,
-                hintText: PStrings.backendUrlHint,
-                labelText: PStrings.backendUrl
+    return WillPopScope(
+      onWillPop: () async {
+        SystemNavigator.pop();
+        return false;
+      },
+      child: PLayout(
+        title: PStrings.setup,
+        backArrow: false,
+        fab: fab,
+        child: WidgetFromList(
+          contextWidth: context.width,
+          forceSingle: true,
+          children: [
+            PTitle(message: PStrings.appSetupThing),
+            PPadding(widget: Text(PStrings.appSetupMessage)),
+            InputContainer(
+              widget: TextField(
+                controller: local.textController,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(
+                  enabledBorder: Settings.noBorder,
+                  focusedBorder: Settings.noBorder,
+                  hintText: PStrings.backendUrlHint,
+                  labelText: PStrings.backendUrl
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

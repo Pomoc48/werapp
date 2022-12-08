@@ -102,14 +102,14 @@ class PDrawer extends StatelessWidget {
 
     return Drawer(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: Settings.pagePadding * 2),
           fabButton(),
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
+                SizedBox(height: Settings.pagePadding),
                 listSection("Main"),
                 listTile(
                   iconData: Icons.home,

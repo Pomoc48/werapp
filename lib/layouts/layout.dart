@@ -69,6 +69,7 @@ class PLayout extends StatelessWidget {
           return _checkLogout(
             Scaffold(
               appBar: appbar,
+              floatingActionButton: fab,
               body: Center(
                 child: SizedBox(
                   width: 600,
@@ -76,7 +77,6 @@ class PLayout extends StatelessWidget {
                     controller: fadeController,
                     child: TabletView2(
                       welcome: welcome,
-                      fab: fab,
                       scrollable: scrollable,
                       onRefresh: onRefresh,
                       child: child,
