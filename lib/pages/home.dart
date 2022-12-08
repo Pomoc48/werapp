@@ -6,6 +6,7 @@ import 'package:wera_f2/classes/user.dart';
 import 'package:wera_f2/firebase_init.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
@@ -13,10 +14,10 @@ import 'package:wera_f2/cards/event.dart';
 import 'package:wera_f2/cards/expense.dart';
 import 'package:wera_f2/cards/command_log.dart';
 import 'package:wera_f2/widgets/current_points.dart';
-import 'package:wera_f2/widgets/drawer.dart';
 import 'package:wera_f2/widgets/money_ratio.dart';
 import 'package:wera_f2/widgets/title.dart';
 import 'package:wera_f2/widgets/title_widget.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(HomePage());
 
@@ -45,73 +46,62 @@ class HomePage extends StatelessWidget {
       firebaseInit();
     });
 
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints c) {
-      return WillPopScope(
-        onWillPop: () async => await logoutConfirm(context),
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(PStrings.appName),
-            automaticallyImplyLeading: isMobile(c),
-          ),
-          floatingActionButton: FloatingActionButton.extended(
-            heroTag: "main",
-            onPressed: () async {
-              local.controller.fadeOut();
-              await Navigator.pushNamed(context, Routes.newCommand);
-              _getHome(true);
-            },
-            label: Text(PStrings.newCommandFAB),
-            icon: const Icon(Icons.grade),
-          ),
-          drawer: drawDrawer(c, const PDrawer()),
-          body: RefreshIndicator(
-            onRefresh: () => _getHome(true),
-            child: FadeIn(controller: local.controller, child: _main(c)),
-          ),
-        ),
-      );
-    });
-  }
+    FloatingActionButton fab = FloatingActionButton.extended(
+      heroTag: "main",
+      onPressed: () async {
+        local.controller.fadeOut();
+        await Navigator.pushNamed(context, Routes.newCommand);
+        _getHome(true);
+      },
+      label: Text(PStrings.newCommandFAB),
+      icon: const Icon(Icons.grade),
+    );
 
-  Widget _main(BoxConstraints constraints) {
-    return getLayout(
-      constraints: constraints,
-      drawer: !isMobile(constraints),
+    return PLayout(
+      title: PStrings.appName,
+      drawer: true,
+      fab: fab,
+      logoutConfirm: true,
+      scrollable: true,
+      onRefresh: () => _getHome(true),
       welcome: Obx(() => _getTitle(global.homeData, global.userId!)),
-      children: [
-        TitleWidget(
-          text: PStrings.currentPoints,
-          child: CurrentPoints(operation: _pointOperation),
-        ),
-        TitleWidget(
-          text: PStrings.moneyIndicator,
-          child: MoneyRatio(refresh: _getHome),
-        ),
-        TitleWidget(
-          text: PStrings.upcomingEvent,
-          child: Obx(() => EventCard(
-            event: global.homeData?.event,
-            controller: local.controller,
-            refresh: () => _getHome(true),
-          )),
-        ),
-        TitleWidget(
-          text: PStrings.recentExpense,
-          child: Obx(() => ExpenseCard(
-            expense: global.homeData?.expense,
-            controller: local.controller,
-            refresh: (() => _getHome(true)),
-          )),
-        ),
-        TitleWidget(
-          text: PStrings.recentCommandLog,
-          child: Obx(() => CommandLogCard(
-            cmdLog: global.homeData?.commandLog,
-            controller: local.controller,
-            refresh: (() => _getHome(true)),
-          )),
-        ),
-      ],
+      child: WidgetFromList(
+        twoColumns: context.width > 999,
+        children: [
+          TitleWidget(
+            text: PStrings.currentPoints,
+            child: CurrentPoints(operation: _pointOperation),
+          ),
+          TitleWidget(
+            text: PStrings.moneyIndicator,
+            child: MoneyRatio(refresh: _getHome),
+          ),
+          TitleWidget(
+            text: PStrings.upcomingEvent,
+            child: Obx(() => EventCard(
+              event: global.homeData?.event,
+              controller: local.controller,
+              refresh: () => _getHome(true),
+            )),
+          ),
+          TitleWidget(
+            text: PStrings.recentExpense,
+            child: Obx(() => ExpenseCard(
+              expense: global.homeData?.expense,
+              controller: local.controller,
+              refresh: (() => _getHome(true)),
+            )),
+          ),
+          TitleWidget(
+            text: PStrings.recentCommandLog,
+            child: Obx(() => CommandLogCard(
+              cmdLog: global.homeData?.commandLog,
+              controller: local.controller,
+              refresh: (() => _getHome(true)),
+            )),
+          ),
+        ],
+      ),
     );
   }
 

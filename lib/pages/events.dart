@@ -4,11 +4,12 @@ import 'package:get/get.dart';
 import 'package:wera_f2/classes/event.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/cards/event.dart';
-import 'package:wera_f2/widgets/drawer.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(EventsPage());
 
@@ -34,41 +35,30 @@ class EventsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     local.runOnce(() => _getEvents());
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints c) {
-        return WillPopScope(
-          onWillPop: () async => await logoutConfirm(context),
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(PStrings.events),
-              automaticallyImplyLeading: isMobile(c),
-            ),
-            drawer: drawDrawer(c, const PDrawer()),
-            floatingActionButton: FloatingActionButton.extended(
-              heroTag: 'main',
-              onPressed: () async {
-                local.controller.fadeOut();
-                await Get.toNamed(Routes.newEvent);
-                _getEvents();
-              },
-              label: Text(PStrings.newEventFAB),
-              icon: const Icon(Icons.event),
-            ),
-            body: RefreshIndicator(
-              onRefresh: () async => _getEvents(),
-              child: FadeIn(
-                controller: local.controller,
-                child: Obx(() => _main(c, global.events)),
-              ),
-            ),
-          ),
-        );
+    FloatingActionButton fab = FloatingActionButton.extended(
+      heroTag: 'main',
+      onPressed: () async {
+        local.controller.fadeOut();
+        await Get.toNamed(Routes.newEvent);
+        _getEvents();
       },
+      label: Text(PStrings.newEventFAB),
+      icon: const Icon(Icons.event),
+    );
+
+    return PLayout(
+      title: PStrings.events,
+      drawer: true,
+      fab: fab,
+      logoutConfirm: true,
+      scrollable: true,
+      onRefresh: () async => _getEvents(),
+      child: Obx(() => WidgetFromList(children: _main(global.events))),
     );
   }
 
-  Widget _main(BoxConstraints constraints, List<Event>? events) {
-    if (events == null) return const SizedBox();
+  List<Widget> _main(List<Event>? events) {
+    if (events == null) return [];
 
     List<Widget> widgets = [];
     for (Event event in events) {
@@ -79,11 +69,7 @@ class EventsPage extends StatelessWidget {
       ));
     }
 
-    return getLayout(
-      constraints: constraints,
-      drawer: !isMobile(constraints),
-      children: widgets,
-    );
+    return widgets;
   }
 
   Future<void> _getEvents() async {
