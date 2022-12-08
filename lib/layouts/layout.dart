@@ -14,7 +14,7 @@ class PLayout extends StatelessWidget {
     this.welcome,
     this.fab,
     this.drawer = false,
-    this.backArrow = true,
+    // this.backArrow = true, // TODO: this
     this.scrollable = false,
     this.logoutConfirm = false,
     this.onRefresh,
@@ -26,7 +26,7 @@ class PLayout extends StatelessWidget {
   final Widget? welcome;
   final Widget? fab;
   final bool drawer;
-  final bool backArrow;
+  // final bool backArrow;
   final bool scrollable;
   final bool logoutConfirm;
   final Future<void> Function()? onRefresh;
@@ -37,7 +37,7 @@ class PLayout extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints c) {
         AppBar appbar = AppBar(
           title: Text(title),
-          automaticallyImplyLeading: backArrow,
+          // automaticallyImplyLeading: backArrow,
         );
 
         if (c.maxWidth < 600) {

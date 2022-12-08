@@ -5,11 +5,12 @@ import 'package:wera_f2/classes/chart_data.dart';
 import 'package:wera_f2/classes/user.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/draw_chart.dart';
-import 'package:wera_f2/widgets/drawer.dart';
 import 'package:wera_f2/widgets/title_widget.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(ChartsPage());
 
@@ -37,31 +38,18 @@ class ChartsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     local.runOnce(() => _getCharts(context));
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints c) {
-        return WillPopScope(
-          onWillPop: () async => await logoutConfirm(context),
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(PStrings.charts),
-              automaticallyImplyLeading: isMobile(c),
-            ),
-            drawer: drawDrawer(c, const PDrawer()),
-            body: RefreshIndicator(
-              onRefresh: () async => _getCharts(context),
-              child: FadeIn(
-                controller: local.controller,
-                child: Obx(() => _drawContent(c, global.charts)),
-              ),
-            ),
-          ),
-        );
-      },
+    return PLayout(
+      title: PStrings.charts,
+      drawer: true,
+      logoutConfirm: true,
+      onRefresh: () async => _getCharts(context),
+      scrollable: true,
+      child: Obx(() => WidgetFromList(children: _main(global.charts))),
     );
   }
 
-  Widget _drawContent(BoxConstraints constraints, List<ChartData>? data) {
-    if (data == null) return const SizedBox();
+  List<Widget> _main(List<ChartData>? data) {
+    if (data == null) return [];
 
     List<Widget> widgets = [];
 
@@ -82,11 +70,7 @@ class ChartsPage extends StatelessWidget {
       ));
     }
 
-    return getLayout(
-      constraints: constraints,
-      drawer: !isMobile(constraints),
-      children: widgets,
-    );
+    return widgets;
   }
 
   List<double> _fixChartHoles(List<double> chartData) {

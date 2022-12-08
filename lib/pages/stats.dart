@@ -4,11 +4,12 @@ import 'package:get/get.dart';
 import 'package:wera_f2/classes/stats_data.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/cards/stats.dart';
-import 'package:wera_f2/widgets/drawer.dart';
 import 'package:wera_f2/widgets/title_widget.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(StatsPage());
 
@@ -42,42 +43,25 @@ class StatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     local.runOnce(() => _getStats());
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints c) {
-        return WillPopScope(
-          onWillPop: () async => await logoutConfirm(context),
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(PStrings.stats),
-              automaticallyImplyLeading: isMobile(c),
-            ),
-            drawer: drawDrawer(c, const PDrawer()),
-            body: RefreshIndicator(
-              onRefresh: () async => _getStats(),
-              child: FadeIn(
-                controller: local.controller,
-                child: Obx(() => _main(c, global.stats)),
-              ),
-            ),
-          ),
-        );
-      },
+    return PLayout(
+      title: PStrings.stats,
+      drawer: true,
+      scrollable: true,
+      logoutConfirm: true,
+      onRefresh: () async => _getStats(),
+      child: Obx(() => WidgetFromList(children: _main(global.stats))),
     );
   }
 
-  Widget _main(BoxConstraints constraints, List<StatsData>? data) {
-    if (data == null) return const SizedBox();
+  List<Widget> _main(List<StatsData>? data) {
+    if (data == null) return [];
 
     List<Widget> stats = [];
     for (var value in StatsType.values) {
       stats.add(_statType(value));
     }
 
-    return getLayout(
-      constraints: constraints,
-      drawer: !isMobile(constraints),
-      children: stats,
-    );
+    return stats;
   }
 
   Widget _statType(StatsType type) {
