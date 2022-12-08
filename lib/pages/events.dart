@@ -52,6 +52,7 @@ class EventsPage extends StatelessWidget {
       fab: fab,
       logoutConfirm: true,
       scrollable: true,
+      fadeController: local.controller,
       onRefresh: () async => _getEvents(),
       child: Obx(() => WidgetFromList(
         contextWidth: context.width,

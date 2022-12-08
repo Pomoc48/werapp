@@ -63,6 +63,7 @@ class HomePage extends StatelessWidget {
       fab: fab,
       logoutConfirm: true,
       scrollable: true,
+      fadeController: local.controller,
       onRefresh: () => _getHome(true),
       welcome: Obx(() => _getTitle(global.homeData, global.userId!)),
       child: WidgetFromList(

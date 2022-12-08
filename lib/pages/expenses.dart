@@ -53,6 +53,7 @@ class ExpensesPage extends StatelessWidget {
       scrollable: true,
       onRefresh: () async => _getExpenses(),
       fab: fab,
+      fadeController: local.controller,
       child: Obx(() => WidgetFromList(
         contextWidth: context.width,
         children: _main(global.expenses),

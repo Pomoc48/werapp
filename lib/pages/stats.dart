@@ -48,6 +48,7 @@ class StatsPage extends StatelessWidget {
       drawer: true,
       scrollable: true,
       logoutConfirm: true,
+      fadeController: local.controller,
       onRefresh: () async => _getStats(),
       child: Obx(() => WidgetFromList(
         contextWidth: context.width,

@@ -58,6 +58,7 @@ class NewCommandPage extends StatelessWidget {
     return PLayout(
       title: PStrings.newCommand,
       fab: fab,
+      fadeController: local.fadeController,
       child: Obx(() => WidgetFromList(
         contextWidth: context.width,
         forceSingle: true,

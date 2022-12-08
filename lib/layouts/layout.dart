@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
 import 'package:wera_f2/layouts/mobile2.dart';
 import 'package:wera_f2/layouts/tablet2.dart';
@@ -17,6 +18,7 @@ class PLayout extends StatelessWidget {
     this.backArrow = true,
     this.scrollable = false,
     this.logoutConfirm = false,
+    this.fadeController,
     this.onRefresh,
     this.appbarActions,
     
@@ -30,6 +32,7 @@ class PLayout extends StatelessWidget {
   final bool backArrow;
   final bool scrollable;
   final bool logoutConfirm;
+  final FadeInController? fadeController;
   final Future<void> Function()? onRefresh;
   final List<Widget>? appbarActions;
 
@@ -49,11 +52,14 @@ class PLayout extends StatelessWidget {
               appBar: appbar,
               floatingActionButton: fab,
               drawer: drawer ? const PDrawer() : null,
-              body: MobileView2(
-                welcome: welcome,
-                scrollable: scrollable,
-                onRefresh: onRefresh,
-                child: child,
+              body: FadeIn(
+                controller: fadeController,
+                child: MobileView2(
+                  welcome: welcome,
+                  scrollable: scrollable,
+                  onRefresh: onRefresh,
+                  child: child,
+                ),
               ),
             ),
           );
@@ -66,12 +72,15 @@ class PLayout extends StatelessWidget {
               body: Center(
                 child: SizedBox(
                   width: 600,
-                  child: TabletView2(
-                    welcome: welcome,
-                    fab: fab,
-                    scrollable: scrollable,
-                    onRefresh: onRefresh,
-                    child: child,
+                  child: FadeIn(
+                    controller: fadeController,
+                    child: TabletView2(
+                      welcome: welcome,
+                      fab: fab,
+                      scrollable: scrollable,
+                      onRefresh: onRefresh,
+                      child: child,
+                    ),
                   ),
                 ),
               ),
@@ -82,13 +91,16 @@ class PLayout extends StatelessWidget {
         return _checkLogout(
           Scaffold(
             appBar: appbar,
-            body: TabletView2(
-              welcome: welcome,
-              drawer: drawer,
-              fab: fab,
-              scrollable: scrollable,
-              onRefresh: onRefresh,
-              child: child,
+            body: FadeIn(
+              controller: fadeController,
+              child: TabletView2(
+                welcome: welcome,
+                drawer: drawer,
+                fab: fab,
+                scrollable: scrollable,
+                onRefresh: onRefresh,
+                child: child,
+              ),
             )
           ),
         );

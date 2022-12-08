@@ -48,6 +48,7 @@ class PriceListPage extends StatelessWidget {
       drawer: true,
       logoutConfirm: true,
       scrollable: true,
+      fadeController: local.fadeController,
       onRefresh: () async => _getCommands(),
       fab: fab,
       child: Obx(() => WidgetFromList(

@@ -51,6 +51,7 @@ class LoginPage extends StatelessWidget {
       title: PStrings.login,
       welcome: PTitle(message: PStrings.chooseUser),
       scrollable: true,
+      fadeController: local.controller,
       onRefresh: () async => _getUsers(),
       child: Obx(() => WidgetFromList(
         contextWidth: context.width,

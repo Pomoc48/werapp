@@ -52,6 +52,7 @@ class CommandLogPage extends StatelessWidget {
       fab: fab,
       scrollable: true,
       logoutConfirm: true,
+      fadeController: local.controller,
       onRefresh: () async => _getCommandLogs(),
       child: Obx(() => WidgetFromList(
         contextWidth: context.width,
