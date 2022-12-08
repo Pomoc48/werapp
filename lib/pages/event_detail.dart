@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
 import 'package:wera_f2/classes/event.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
-import 'package:wera_f2/layouts/single_column.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/create_card.dart';
 import 'package:wera_f2/widgets/title.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(DetailedEventPage());
 
@@ -58,52 +58,36 @@ class DetailedEventPage extends StatelessWidget {
       _repeatCalculateWait();
     });
 
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            constraints: Settings.actionConstraint,
-            icon: const Icon(Icons.delete),
-            onPressed: () => _delete(),
-          ),
+    // TODO: fix delete action
+
+    return PLayout(
+      title: local.event!.description,
+      welcome: Obx(() => PTitle(
+        message: "${local.diff.value.inHours} ${PStrings.hoursLeft}",
+      )),
+      child: WidgetFromList(
+        children: [
+          Obx(() => _progressBar(
+            title: PStrings.days,
+            time: local.days.value,
+            divider: 7,
+          )),
+          Obx(() => _progressBar(
+            title: PStrings.hours,
+            time: local.hours.value,
+            divider: 24,
+          )),
+          Obx(() => _progressBar(
+            title: PStrings.minutes,
+            time: local.minutes.value,
+            divider: 60,
+          )),
+          Obx(() => _progressBar(
+            title: PStrings.seconds,
+            time: local.seconds.value,
+            divider: 60,
+          )),
         ],
-        title: Text(local.event!.description),
-      ),
-      body: SingleChildScrollView(
-        child: FadeIn(
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return SingleColumn(
-                constraints: constraints,
-                welcome: Obx(() => PTitle(
-                  message: "${local.diff.value.inHours} ${PStrings.hoursLeft}",
-                )),
-                children: [
-                  Obx(() => _progressBar(
-                    title: PStrings.days,
-                    time: local.days.value,
-                    divider: 7,
-                  )),
-                  Obx(() => _progressBar(
-                    title: PStrings.hours,
-                    time: local.hours.value,
-                    divider: 24,
-                  )),
-                  Obx(() => _progressBar(
-                    title: PStrings.minutes,
-                    time: local.minutes.value,
-                    divider: 60,
-                  )),
-                  Obx(() => _progressBar(
-                    title: PStrings.seconds,
-                    time: local.seconds.value,
-                    divider: 60,
-                  )),
-                ],
-              );
-            },
-          ),
-        ),
       ),
     );
   }

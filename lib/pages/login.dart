@@ -6,7 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:wera_f2/classes/user.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
-import 'package:wera_f2/layouts/single_column.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
@@ -15,6 +15,7 @@ import 'package:wera_f2/widgets/numpad.dart';
 import 'package:wera_f2/widgets/padding.dart';
 import 'package:wera_f2/widgets/profile_avatar.dart';
 import 'package:wera_f2/widgets/title.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(LoginPage());
 
@@ -46,57 +47,31 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     local.runOnce(_getPrefs);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(PStrings.login)),
-      body: FadeIn(
-        controller: local.controller,
-        child: RefreshIndicator(
-          onRefresh: () => _getUsers(),
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Obx(() => _main(global.users)),
-          ),
-        ),
-      ),
+    return PLayout(
+      title: PStrings.login,
+      welcome: PTitle(message: PStrings.chooseUser),
+      scrollable: true,
+      onRefresh: () async => _getUsers(),
+      child: Obx(() => WidgetFromList(children: _main(global.users))),
     );
   }
 
-  Widget _main(List<User>? users) {
+  List<Widget> _main(List<User>? users) {
     if (users == null) {
-      return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return SingleColumn(
-            constraints: constraints,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  PTitle(message: PStrings.noConnection),
-                  PPadding(widget: Text(PStrings.noConnectionMessage)),
-                  PPadding(
-                    widget: ElevatedButton.icon(
-                      onPressed: () => Get.toNamed(Routes.setup),
-                      icon: const Icon(Icons.sync),
-                      label: Text(PStrings.updateBackend),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      );
+      return [
+        PTitle(message: PStrings.noConnection),
+        PPadding(widget: Text(PStrings.noConnectionMessage)),
+        PPadding(
+          widget: ElevatedButton.icon(
+            onPressed: () => Get.toNamed(Routes.setup),
+            icon: const Icon(Icons.sync),
+            label: Text(PStrings.updateBackend),
+          ),
+        ),
+      ];
     }
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return SingleColumn(
-          constraints: constraints,
-          welcome: PTitle(message: PStrings.chooseUser),
-          children: _getUserList(users),
-        );
-      },
-    );
+    return _getUserList(users);
   }
 
   List<Widget> _getUserList(List<User> data) {

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
 import 'package:wera_f2/classes/command.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
-import 'package:wera_f2/layouts/single_column.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/input_container.dart';
 import 'package:wera_f2/widgets/padding.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(NewPriceListPage());
 
@@ -49,21 +49,19 @@ class NewPriceListPage extends StatelessWidget {
       local.updateInit();
     }
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints c) {
-        return Scaffold(
-          appBar: AppBar(title: Text(pageTitle), actions: _drawDelete()),
-          floatingActionButton: FloatingActionButton.extended(
-            heroTag: "main",
-            onPressed: () => _addUpdate(local.passedItem == null),
-            icon: const Icon(Icons.check),
-            label: Text(PStrings.confirmFAB),
-          ),
-          body: FadeIn(
-            child: _mainSection(c),
-          ),
-        );
-      },
+    FloatingActionButton fab = FloatingActionButton.extended(
+      heroTag: "main",
+      onPressed: () => _addUpdate(local.passedItem == null),
+      icon: const Icon(Icons.check),
+      label: Text(PStrings.confirmFAB),
+    );
+
+    // TODO: fix appbar delete button
+
+    return PLayout(
+      title: pageTitle,
+      fab: fab,
+      child: WidgetFromList(children: _main()),
     );
   }
 
@@ -81,13 +79,9 @@ class NewPriceListPage extends StatelessWidget {
     return null;
   }
 
-  Widget _mainSection(BoxConstraints constraints) {
-    if (global.commands == null) return const SizedBox();
-
-    return SingleColumn(
-      constraints: constraints,
-      children: [_nameInput(), _priceInput()],
-    );
+  List<Widget> _main() {
+    if (global.commands == null) return [];
+    return [_nameInput(), _priceInput()];
   }
 
   Widget _nameInput() {

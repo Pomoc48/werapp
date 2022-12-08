@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
+import 'package:flutter_fadein/flutter_fadein.dart'; // TODO: fix, add back
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:wera_f2/classes/user.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
-import 'package:wera_f2/layouts/single_column.dart';
+import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/create_card.dart';
-import 'package:wera_f2/widgets/drawer.dart';
 import 'package:wera_f2/widgets/input_container.dart';
 import 'package:wera_f2/widgets/numpad.dart';
 import 'package:wera_f2/widgets/padding.dart';
 import 'package:wera_f2/widgets/title_widget.dart';
+import 'package:wera_f2/widgets/widget_from_list.dart';
 
 void main() => runApp(SettingsPage());
 
@@ -78,34 +78,20 @@ class SettingsPage extends StatelessWidget {
 
     });
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints c) {
-        return WillPopScope(
-          onWillPop: () async => await logoutConfirm(context),
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(PStrings.settings),
-              automaticallyImplyLeading: isMobile(c),
-            ),
-            drawer: drawDrawer(c, const PDrawer()),
-            floatingActionButton: FloatingActionButton.extended(
-              heroTag: "main",
-              onPressed: _confirm,
-              icon: const Icon(Icons.check),
-              label: Text(PStrings.confirmFAB),
-            ),
-            body: FadeIn(child: _main(c)),
-          ),
-        );
-      },
+    FloatingActionButton fab = FloatingActionButton.extended(
+      heroTag: "main",
+      onPressed: _confirm,
+      icon: const Icon(Icons.check),
+      label: Text(PStrings.confirmFAB),
     );
-  }
 
-  Widget _main(BoxConstraints constraints) {
-    return SingleChildScrollView(
-      child: SingleColumn(
-        constraints: constraints,
-        drawer: !isMobile(constraints),
+    return PLayout(
+      title: PStrings.settings,
+      drawer: true,
+      logoutConfirm: true,
+      scrollable: true,
+      fab: fab,
+      child: WidgetFromList(
         children: [
           TitleWidget(
             text: PStrings.userData,
