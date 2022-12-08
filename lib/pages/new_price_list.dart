@@ -56,10 +56,9 @@ class NewPriceListPage extends StatelessWidget {
       label: Text(PStrings.confirmFAB),
     );
 
-    // TODO: fix appbar delete button
-
     return PLayout(
       title: pageTitle,
+      appbarActions: _drawDelete(),
       fab: fab,
       child: WidgetFromList(
         contextWidth: context.width,

@@ -58,13 +58,18 @@ class DetailedEventPage extends StatelessWidget {
       _repeatCalculateWait();
     });
 
-    // TODO: fix delete action
-
     return PLayout(
       title: local.event!.description,
       welcome: Obx(() => PTitle(
         message: "${local.diff.value.inHours} ${PStrings.hoursLeft}",
       )),
+      appbarActions: [
+        IconButton(
+          constraints: Settings.actionConstraint,
+          icon: const Icon(Icons.delete),
+          onPressed: () => _delete(),
+        ),
+      ],
       child: WidgetFromList(
         contextWidth: context.width,
         forceSingle: true,

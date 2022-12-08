@@ -18,6 +18,7 @@ class PLayout extends StatelessWidget {
     this.scrollable = false,
     this.logoutConfirm = false,
     this.onRefresh,
+    this.appbarActions,
     
   }) : super(key: key);
 
@@ -30,6 +31,7 @@ class PLayout extends StatelessWidget {
   final bool scrollable;
   final bool logoutConfirm;
   final Future<void> Function()? onRefresh;
+  final List<Widget>? appbarActions;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class PLayout extends StatelessWidget {
         AppBar appbar = AppBar(
           title: Text(title),
           automaticallyImplyLeading: backArrow,
+          actions: appbarActions,
         );
 
         if (c.maxWidth < 600) {
