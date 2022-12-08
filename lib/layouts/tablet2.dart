@@ -37,6 +37,7 @@ class TabletView2 extends StatelessWidget {
         padding: EdgeInsets.all(Settings.pagePadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: widgets,
         ),
       ),

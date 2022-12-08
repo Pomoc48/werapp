@@ -24,7 +24,7 @@ class WidgetFromList extends StatelessWidget {
       );
     }
 
-    if (contextWidth > 999) {
+    if (contextWidth > 999 && !forceSingle) {
       List<Widget> wL = [];
       List<Widget> wR = [];
 
@@ -68,6 +68,7 @@ class WidgetFromList extends StatelessWidget {
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: widgets,
     );
   }

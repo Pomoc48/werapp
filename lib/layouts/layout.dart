@@ -56,6 +56,26 @@ class PLayout extends StatelessWidget {
           );
         }
 
+        if (!drawer) {
+          return _checkLogout(
+            Scaffold(
+              appBar: appbar,
+              body: Center(
+                child: SizedBox(
+                  width: 600,
+                  child: TabletView2(
+                    welcome: welcome,
+                    fab: fab,
+                    scrollable: scrollable,
+                    onRefresh: onRefresh,
+                    child: child,
+                  ),
+                ),
+              ),
+            )
+          );
+        }
+
         return _checkLogout(
           Scaffold(
             appBar: appbar,

@@ -161,6 +161,7 @@ class PDrawer extends StatelessWidget {
                   label: PStrings.logout,
                   path: Routes.login,
                 ),
+                SizedBox(height: Settings.pagePadding * 2),
               ],
             ),
           ),

@@ -93,7 +93,6 @@ class SettingsPage extends StatelessWidget {
       fab: fab,
       child: WidgetFromList(
         contextWidth: context.width,
-        forceSingle: true,
         children: [
           TitleWidget(
             text: PStrings.userData,
