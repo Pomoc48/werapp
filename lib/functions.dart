@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:wera_f2/classes/user.dart';
 
@@ -19,11 +20,11 @@ double parseDouble(value) {
   }
 }
 
-void snackBar(BuildContext context, String text, [SnackBarAction? action]) {
+void snackBar(BuildContext context, String text) {
   final snackBar = SnackBar(
     behavior: SnackBarBehavior.floating,
+    margin: context.width > 600 ? EdgeInsets.fromLTRB(20, 0, context.width - 600, 20) : null,
     content: Text(text),
-    action: action,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
