@@ -51,6 +51,7 @@ class CommandLogPage extends StatelessWidget {
       drawer: true,
       fab: fab,
       scrollable: true,
+      logoutConfirm: true,
       onRefresh: () async => _getCommandLogs(),
       child: Obx(() => WidgetFromList(
         twoColumns: context.width > 999,
