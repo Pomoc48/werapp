@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:wera_f2/settings.dart';
+import 'package:wera_f2/widgets/drawer.dart';
 
-class MobileView2 extends StatelessWidget {
-  const MobileView2({
+class TabletView extends StatelessWidget {
+  const TabletView({
     Key? key,
     required this.child,
+    this.drawer = false,
     this.welcome,
+    this.fab,
     this.scrollable = false,
     this.onRefresh,
   }) : super(key: key);
 
   final Widget child;
+  final bool drawer;
   final Widget? welcome;
+  final Widget? fab;
   final bool scrollable;
   final Future<void> Function()? onRefresh;
 
@@ -27,11 +32,7 @@ class MobileView2 extends StatelessWidget {
 
     widgets.add(child);
 
-    if (Scaffold.of(context).hasFloatingActionButton) {
-      widgets.add(const SizedBox(height: 72));
-    }
-
-    return _getScroll(
+    Widget finalWidgets = _getScroll(
       Padding(
         padding: EdgeInsets.all(Settings.pagePadding),
         child: Column(
@@ -41,6 +42,18 @@ class MobileView2 extends StatelessWidget {
         ),
       ),
     );
+
+    if (drawer) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(width: 260, child: PDrawer(fab: fab)),
+          Expanded(child: finalWidgets),
+        ],
+      );
+    }
+
+    return finalWidgets;
   }
 
   Widget _getScroll(Widget widget) {

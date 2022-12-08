@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/layouts/mobile2.dart';
-import 'package:wera_f2/layouts/tablet2.dart';
+import 'package:wera_f2/layouts/mobile.dart';
+import 'package:wera_f2/layouts/tablet.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/drawer.dart';
@@ -54,7 +54,7 @@ class PLayout extends StatelessWidget {
               drawer: drawer ? const PDrawer() : null,
               body: FadeIn(
                 controller: fadeController,
-                child: MobileView2(
+                child: MobileView(
                   welcome: welcome,
                   scrollable: scrollable,
                   onRefresh: onRefresh,
@@ -75,7 +75,7 @@ class PLayout extends StatelessWidget {
                   width: 600,
                   child: FadeIn(
                     controller: fadeController,
-                    child: TabletView2(
+                    child: TabletView(
                       welcome: welcome,
                       scrollable: scrollable,
                       onRefresh: onRefresh,
@@ -93,7 +93,7 @@ class PLayout extends StatelessWidget {
             appBar: appbar,
             body: FadeIn(
               controller: fadeController,
-              child: TabletView2(
+              child: TabletView(
                 welcome: welcome,
                 drawer: drawer,
                 fab: fab,
