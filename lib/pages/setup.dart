@@ -51,8 +51,7 @@ class Setup extends StatelessWidget {
             InputContainer(
               widget: TextField(
                 controller: local.textController,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
+                keyboardType: TextInputType.url,
                 decoration: InputDecoration(
                   enabledBorder: Settings.noBorder,
                   focusedBorder: Settings.noBorder,
