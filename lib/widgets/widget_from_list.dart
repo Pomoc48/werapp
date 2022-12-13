@@ -17,7 +17,10 @@ class WidgetFromList extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> widgets = [];
     if (children.isEmpty) {
-      return CircularProgressIndicator(); // TODO: add widget
+      return const SizedBox(
+        height: 100,
+        child: Center(child: CircularProgressIndicator()),
+      );
     }
 
     SizedBox columnWidth(List<Widget> widgetList) {
