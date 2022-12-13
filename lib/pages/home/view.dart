@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
 import 'package:wera_f2/classes/home_data.dart';
 import 'package:wera_f2/classes/user.dart';
 import 'package:wera_f2/firebase_init.dart';
 import 'package:wera_f2/functions.dart';
-import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/layouts/layout.dart';
+import 'package:wera_f2/pages/home/controller.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/cards/event.dart';
@@ -18,28 +17,15 @@ import 'package:wera_f2/widgets/title.dart';
 import 'package:wera_f2/widgets/title_widget.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-class LocalController extends GetxController{
-  bool _initial = true;
-  final FadeInController controller = FadeInController();
-
-  runOnce(Function() fun) {
-    if (_initial) {
-      fun();
-      _initial = false;
-    }
-  }
-}
-
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  final GlobalController global = Get.find();
-  final LocalController local = LocalController();
+  final HomeController local = HomeController();
 
   @override
   Widget build(BuildContext context) {
     local.runOnce(() {
-      global.updateHomeData(local.controller);
+      local.updateHome();
       firebaseInit();
     });
 
@@ -48,13 +34,11 @@ class HomePage extends StatelessWidget {
       onPressed: () async {
         local.controller.fadeOut();
         await Navigator.pushNamed(context, Routes.newCommand);
-        global.updateHomeData(local.controller);
+        local.updateHome();
       },
       label: Text(PStrings.newCommandFAB),
       icon: const Icon(Icons.grade),
     );
-
-    void Function([FadeInController?]) refresh = global.updateHomeData;
 
     return PLayout(
       title: PStrings.appName,
@@ -63,8 +47,8 @@ class HomePage extends StatelessWidget {
       logoutConfirm: true,
       scrollable: true,
       fadeController: local.controller,
-      onRefresh: () async => refresh(local.controller),
-      welcome: Obx(() => _getTitle(global.homeData, global.userId!)),
+      onRefresh: () async => local.updateHome(),
+      welcome: Obx(() => _getTitle(local.data, local.userId!)),
       child: WidgetFromList(
         contextWidth: context.width,
         children: [
@@ -79,25 +63,25 @@ class HomePage extends StatelessWidget {
           TitleWidget(
             text: PStrings.upcomingEvent,
             child: Obx(() => EventCard(
-              event: global.homeData?.event,
+              event: local.data?.event,
               controller: local.controller,
-              refresh: () => refresh(local.controller),
+              refresh: () => local.updateHome(),
             )),
           ),
           TitleWidget(
             text: PStrings.recentExpense,
             child: Obx(() => ExpenseCard(
-              expense: global.homeData?.expense,
+              expense: local.data?.expense,
               controller: local.controller,
-              refresh: () => refresh(local.controller),
+              refresh: () => local.updateHome(),
             )),
           ),
           TitleWidget(
             text: PStrings.recentCommandLog,
             child: Obx(() => CommandLogCard(
-              cmdLog: global.homeData?.commandLog,
+              cmdLog: local.data?.commandLog,
               controller: local.controller,
-              refresh: () => refresh(local.controller),
+              refresh: () => local.updateHome(),
             )),
           ),
         ],

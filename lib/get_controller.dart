@@ -1,4 +1,3 @@
-import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
 import 'package:wera_f2/classes/chart_data.dart';
 import 'package:wera_f2/classes/command.dart';
@@ -26,7 +25,6 @@ class GlobalController extends GetxController{
   final _stats = Rx<List<StatsData>?>(null);
   final _chart = Rx<List<ChartData>?>(null);
 
-  List<User>? get users => _users.value;
   List<CommandLog>? get commandsLog => _commandsLog.value;
   List<Expense>? get expenses => _expenses.value;
   List<Command>? get commands => _commands.value;
@@ -34,18 +32,36 @@ class GlobalController extends GetxController{
   List<StatsData>? get stats => _stats.value;
   List<ChartData>? get charts => _chart.value;
 
-  updateToken(String newToken) => token = newToken;
-  updateVapid(String newVapid) => vapid = newVapid;
   updateBackend(String newBackend) => backend = newBackend;
-  updateUserId(int newId) => userId = newId;
-  updateUsers(List<User>? newData) => _users.value = newData;
 
-  // HOME DATA
+  // LOGIN
+  List<User>? get users => _users.value;
+
+  updateLoginValues({
+    required String newToken,
+    required String newVapid,
+    required int newId,
+  }) {
+    token = newToken;
+    vapid = newVapid;
+    userId = newId;
+  }
+
+  void updateUsers() async {
+    _users.value = null;
+    Map map = await query(link: "user", type: RequestType.get);
+
+    if (map["success"]) {
+      _users.value = userListFromList(map["data"]);
+    } else {
+      snackBar(Get.context!, map["message"]);
+    }
+  }
+
+  // HOME
   HomeData? get homeData => _homeData.value;
 
-  void updateHomeData([FadeInController? fadeInController]) async {
-    if (fadeInController != null) fadeInController.fadeOut();
-
+  void updateHomeData() async {
     Map map = await query(
       link: "home",
       type: RequestType.get,
@@ -57,8 +73,6 @@ class GlobalController extends GetxController{
     } else {
       snackBar(Get.context!, map["message"]);
     }
-
-    if (fadeInController != null) fadeInController.fadeIn();
   }
 
   void pointOperation(User user, bool add) async {
