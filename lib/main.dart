@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:wera_f2/get_controller.dart';
-import 'package:wera_f2/pages/charts.dart';
+import 'package:wera_f2/pages/charts/view.dart';
 import 'package:wera_f2/pages/command_logs.dart';
 import 'package:wera_f2/pages/create_user.dart';
 import 'package:wera_f2/pages/event_add.dart';

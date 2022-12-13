@@ -30,7 +30,6 @@ class GlobalController extends GetxController{
   List<Command>? get commands => _commands.value;
   List<Event>? get events => _events.value;
   List<StatsData>? get stats => _stats.value;
-  List<ChartData>? get charts => _chart.value;
 
   updateBackend(String newBackend) => backend = newBackend;
 
@@ -85,11 +84,23 @@ class GlobalController extends GetxController{
     }
   }
 
+  // CHARTS
+  List<ChartData>? get charts => _chart.value;
+
+  void updateCharts() async {
+    Map map = await query(link: "chart", type: RequestType.get);
+
+    if (map["success"]) {
+      _chart.value = chartDataFromList(map["data"]);
+    } else {
+      snackBar(Get.context!, map["message"]);
+    }
+  }
+
   updateCmdLog(List<CommandLog>? newData) => _commandsLog.value = newData;
   updateCommands(List<Command>? newData) => _commands.value = newData;
   updateEvents(List<Event>? newData) => _events.value = newData;
   updateStats(List<StatsData>? newData) => _stats.value = newData;
-  updateCharts(List<ChartData>? newData) => _chart.value = newData;
   updateExpenses(List<Expense>? newData) => _expenses.value = newData;
   updatePending(int newInt) => _homeData.value?.pending = newInt;
 }

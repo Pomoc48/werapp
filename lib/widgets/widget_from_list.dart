@@ -16,6 +16,9 @@ class WidgetFromList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgets = [];
+    if (children.isEmpty) {
+      return CircularProgressIndicator(); // TODO: add widget
+    }
 
     SizedBox columnWidth(List<Widget> widgetList) {
       return SizedBox(
