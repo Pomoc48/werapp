@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/user.dart';
+import 'package:wera_f2/models/user.dart';
 import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/pages/expeses/new/controller.dart';
 import 'package:wera_f2/settings.dart';

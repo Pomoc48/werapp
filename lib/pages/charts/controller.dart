@@ -1,6 +1,6 @@
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/chart_data.dart';
+import 'package:wera_f2/models/chart_data.dart';
 import 'package:wera_f2/get_controller.dart';
 
 class ChartController extends GetxController{
@@ -74,9 +74,9 @@ class ChartController extends GetxController{
     controller.fadeIn();
   }
 
-  runOnce(Function() fun) {
+  pageSetup() {
     if (_initial) {
-      fun();
+      getCharts();
       _initial = false;
     }
   }

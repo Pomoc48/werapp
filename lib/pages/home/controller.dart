@@ -1,6 +1,6 @@
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/home_data.dart';
+import 'package:wera_f2/models/home_data.dart';
 import 'package:wera_f2/get_controller.dart';
 
 class HomeController extends GetxController{
@@ -18,7 +18,7 @@ class HomeController extends GetxController{
     controller.fadeIn();
   }
 
-  void runOnce(Function() fun) {
+  void pageSetup(Function() fun) {
     if (_initial) {
       fun();
       _initial = false;

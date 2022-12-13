@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/command_log.dart';
+import 'package:wera_f2/models/command_log.dart';
 import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/pages/command_logs/list/controller.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
@@ -14,7 +14,7 @@ class CommandLogPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    local.runOnce();
+    local.pageSetup();
 
     FloatingActionButton fab = FloatingActionButton.extended(
       heroTag: "main",

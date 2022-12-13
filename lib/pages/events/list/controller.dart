@@ -20,7 +20,7 @@ class EventsController extends GetxController{
     getEvents();
   }
 
-  void runOnce() {
+  void pageSetup() {
     if (_initial) {
       getEvents();
       _initial = false;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/expense.dart';
+import 'package:wera_f2/models/expense.dart';
 import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/pages/expeses/list/controller.dart';
 import 'package:wera_f2/strings.dart';
@@ -14,7 +14,7 @@ class ExpensesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    local.runOnce();
+    local.pageSetup();
 
     FloatingActionButton fab = FloatingActionButton.extended(
       heroTag: 'main',

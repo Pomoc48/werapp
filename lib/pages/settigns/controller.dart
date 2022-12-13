@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:wera_f2/classes/user.dart';
+import 'package:wera_f2/models/user.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/server_query.dart';
@@ -106,7 +106,7 @@ class SettingsController extends GetxController{
     snackBar(Get.context!, map["message"]);
   }
 
-  void runOnce() {
+  void pageSetup() {
     if (_initial) {
       user = findUser(
         id: global.userId!,

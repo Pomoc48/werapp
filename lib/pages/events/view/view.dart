@@ -15,7 +15,7 @@ class DetailedEventPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    local.runOnce();
+    local.pageSetup();
 
     return PLayout(
       title: local.event!.description,

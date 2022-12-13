@@ -1,7 +1,7 @@
-import 'package:wera_f2/classes/command_log.dart';
-import 'package:wera_f2/classes/event.dart';
-import 'package:wera_f2/classes/expense.dart';
-import 'package:wera_f2/classes/user.dart';
+import 'package:wera_f2/models/command_log.dart';
+import 'package:wera_f2/models/event.dart';
+import 'package:wera_f2/models/expense.dart';
+import 'package:wera_f2/models/user.dart';
 import 'package:wera_f2/functions.dart';
 
 class HomeData {

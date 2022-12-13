@@ -20,7 +20,7 @@ class ExpensesController extends GetxController{
     getExpenses();
   }
 
-  void runOnce() {
+  void pageSetup() {
     if (_initial) {
       getExpenses();
       _initial = false;

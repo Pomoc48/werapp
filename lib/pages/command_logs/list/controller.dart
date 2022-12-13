@@ -20,7 +20,7 @@ class CommandLogController extends GetxController{
     getCommandLogs();
   }
 
-  void runOnce() {
+  void pageSetup() {
     if (_initial) {
       getCommandLogs();
       _initial = false;

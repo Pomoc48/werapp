@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/expense.dart';
+import 'package:wera_f2/models/expense.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/settings.dart';

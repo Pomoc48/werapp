@@ -1,8 +1,8 @@
 import 'package:chart_sparkline/chart_sparkline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/chart_data.dart';
-import 'package:wera_f2/classes/user.dart';
+import 'package:wera_f2/models/chart_data.dart';
+import 'package:wera_f2/models/user.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/pages/charts/controller.dart';
@@ -18,7 +18,7 @@ class ChartsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    local.runOnce(() => local.getCharts());
+    local.pageSetup();
 
     return PLayout(
       title: PStrings.charts,

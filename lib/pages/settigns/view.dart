@@ -18,7 +18,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    local.runOnce();
+    local.pageSetup();
 
     FloatingActionButton fab = FloatingActionButton.extended(
       heroTag: "main",

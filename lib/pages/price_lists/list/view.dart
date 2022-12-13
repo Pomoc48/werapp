@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/command.dart';
-import 'package:wera_f2/classes/user.dart';
+import 'package:wera_f2/models/command.dart';
+import 'package:wera_f2/models/user.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/pages/price_lists/list/controller.dart';
@@ -17,7 +17,7 @@ class PriceListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    local.runOnce();
+    local.pageSetup();
 
     FloatingActionButton fab = FloatingActionButton.extended(
       heroTag: "main",

@@ -1,8 +1,8 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/home_data.dart';
-import 'package:wera_f2/classes/user.dart';
+import 'package:wera_f2/models/home_data.dart';
+import 'package:wera_f2/models/user.dart';
 import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/widgets/create_card.dart';

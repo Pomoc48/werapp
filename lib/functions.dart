@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:intl/intl.dart';
-import 'package:wera_f2/classes/user.dart';
+import 'package:wera_f2/models/user.dart';
 
 String formatDouble(double n, int format) {
   return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : format);

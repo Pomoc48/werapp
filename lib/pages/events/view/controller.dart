@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/event.dart';
+import 'package:wera_f2/models/event.dart';
 import 'package:wera_f2/functions.dart';
 
 class EventDetailController extends GetxController{
@@ -52,7 +52,7 @@ class EventDetailController extends GetxController{
     updateDiff(event!.timestamp.difference(now));
   }
 
-  void runOnce() {
+  void pageSetup() {
     if (_initial) {
       event = Get.arguments["event"];
       calculateWait();

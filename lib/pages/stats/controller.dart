@@ -13,9 +13,9 @@ class StatsController extends GetxController{
     controller.fadeIn();
   }
 
-  void runOnce(Function() fun) {
+  void pageSetup() {
     if (_initial) {
-      fun();
+      getStats();
       _initial = false;
     }
   }

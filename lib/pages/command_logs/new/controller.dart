@@ -55,7 +55,7 @@ class NewCommandController extends GetxController{
     if (map["success"]) Get.back();
   }
 
-  void runOnce() {
+  void pageSetup() {
     if (_initial) {
       getCommands();
       _initial = false;

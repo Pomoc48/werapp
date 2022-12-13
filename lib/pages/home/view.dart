@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/home_data.dart';
-import 'package:wera_f2/classes/user.dart';
+import 'package:wera_f2/models/home_data.dart';
+import 'package:wera_f2/models/user.dart';
 import 'package:wera_f2/firebase_init.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/layouts/layout.dart';
@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    local.runOnce(() {
+    local.pageSetup(() {
       local.updateHome();
       firebaseInit();
     });

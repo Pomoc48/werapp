@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/stats_data.dart';
+import 'package:wera_f2/models/stats_data.dart';
 import 'package:wera_f2/layouts/layout.dart';
 import 'package:wera_f2/pages/stats/controller.dart';
 import 'package:wera_f2/strings.dart';
@@ -23,7 +23,7 @@ class StatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    local.runOnce(() => local.getStats());
+    local.pageSetup();
 
     return PLayout(
       title: PStrings.stats,

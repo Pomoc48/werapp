@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
-import 'package:wera_f2/classes/event.dart';
+import 'package:wera_f2/models/event.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
