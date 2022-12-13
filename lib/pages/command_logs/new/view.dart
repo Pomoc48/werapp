@@ -1,54 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
 import 'package:wera_f2/classes/command.dart';
 import 'package:wera_f2/classes/user.dart';
-import 'package:wera_f2/functions.dart';
-import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/layouts/layout.dart';
-import 'package:wera_f2/server_query.dart';
+import 'package:wera_f2/pages/command_logs/new/controller.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/dropdown.dart';
 import 'package:wera_f2/widgets/input_container.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-class LocalController extends GetxController{
-  bool _initial = true;
-
-  final categoryId = Rx<int?>(null);
-  final userId = Rx<int?>(null);
-
-  final FadeInController fadeController = FadeInController();
-  final TextEditingController textController = TextEditingController();
-  final TextEditingController priceController = TextEditingController();
-
-  updateCategoryId(newInt) => categoryId.value = newInt;
-  updateCatIfNull(int newInt) => categoryId.value ??= newInt;
-  updateUserId(newInt) => userId.value = newInt;
-  updateUserIfNull(int newInt) => userId.value ??= newInt;
-
-  runOnce(Function() fun) {
-    if (_initial) {
-      fun();
-      _initial = false;
-    }
-  }
-}
-
 class NewCommandPage extends StatelessWidget {
   NewCommandPage({super.key});
 
-  final GlobalController global = Get.find();
-  final LocalController local = LocalController();
+  final NewCommandController local = NewCommandController();
 
   @override
   Widget build(BuildContext context) {
-    local.runOnce(() => _getCommands());
+    local.runOnce();
 
     FloatingActionButton fab = FloatingActionButton.extended(
       heroTag: "main",
-      onPressed: _add,
+      onPressed: local.add,
       icon: const Icon(Icons.check),
       label: Text(PStrings.confirmFAB),
     );
@@ -60,7 +33,7 @@ class NewCommandPage extends StatelessWidget {
       child: Obx(() => WidgetFromList(
         contextWidth: context.width,
         forceSingle: true,
-        children: _main(global.commands),
+        children: _main(local.global.commands),
       )),
     );
   }
@@ -73,7 +46,7 @@ class NewCommandPage extends StatelessWidget {
   Widget _categorySelect() {
     return PDropdown(
       title: PStrings.commandType,
-      items: _displayCategories(global.commands!),
+      items: _displayCategories(local.global.commands!),
       value: local.categoryId.value,
       onChanged: local.updateCategoryId,
     );
@@ -82,7 +55,7 @@ class NewCommandPage extends StatelessWidget {
   Widget _userSelect() {
     return PDropdown(
       title: PStrings.recipient,
-      items: _displayUsers(global.homeData!.users),
+      items: _displayUsers(local.global.homeData!.users),
       value: local.userId.value,
       onChanged: local.updateUserId,
     );
@@ -102,7 +75,7 @@ class NewCommandPage extends StatelessWidget {
     List<DropdownMenuItem> widgets = [];
 
     for (User user in users) {
-      if (user.id != global.userId) {
+      if (user.id != local.global.userId) {
         local.updateUserIfNull(user.id);
         widgets.add(dropdownMenuItem(user.id, user.name));
       } 
@@ -124,43 +97,5 @@ class NewCommandPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _add() async {
-    if (local.textController.text == "") {
-      snackBar(Get.context!, PStrings.pickComm);
-      return;
-    }
-
-    loading(Get.context!);
-
-    Map map = await query(
-      link: "command-log",
-      type: RequestType.post,
-      params: {
-        "user_id": global.userId!,
-        "command_id": local.categoryId.value!,
-        "description": local.textController.text,
-        "recipient_id": local.userId.value!,
-      },
-    );
-
-    loaded(Get.context!);
-
-    snackBar(Get.context!, map["message"]);
-    if (map["success"]) Get.back();
-  }
-
-  Future<void> _getCommands() async {
-    local.fadeController.fadeOut();
-    Map map = await query(link: "command", type: RequestType.get);
-
-    if (map["success"]) {
-      global.updateCommands(commandListFromList(map["data"]));
-    } else {
-      snackBar(Get.context!, map["message"]);
-    }
-
-    local.fadeController.fadeIn();
   }
 }

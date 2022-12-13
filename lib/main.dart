@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/pages/charts/view.dart';
-import 'package:wera_f2/pages/command_logs.dart';
+import 'package:wera_f2/pages/command_logs/list/view.dart';
 import 'package:wera_f2/pages/create_user.dart';
 import 'package:wera_f2/pages/events/add/view.dart';
 import 'package:wera_f2/pages/events/view/view.dart';
@@ -12,7 +12,7 @@ import 'package:wera_f2/pages/expense_add.dart';
 import 'package:wera_f2/pages/expenses.dart';
 import 'package:wera_f2/pages/home/view.dart';
 import 'package:wera_f2/pages/login/view.dart';
-import 'package:wera_f2/pages/new_command.dart';
+import 'package:wera_f2/pages/command_logs/new/view.dart';
 import 'package:wera_f2/pages/new_price_list.dart';
 import 'package:wera_f2/pages/price_list.dart';
 import 'package:wera_f2/pages/setup/view.dart';
@@ -24,7 +24,7 @@ import 'package:wera_f2/strings.dart';
 void main() async {
   Get.put(GlobalController());
   await GetStorage.init();
-  
+
   String? themeColor = GetStorage().read("themeColor");
 
   ThemeData themeDark = ThemeData(

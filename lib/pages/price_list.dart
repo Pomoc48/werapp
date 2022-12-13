@@ -90,14 +90,7 @@ class PriceListPage extends StatelessWidget {
 
   Future<void> _getCommands() async {
     local.fadeController.fadeOut();
-    Map map = await query(link: "command", type: RequestType.get);
-
-    if (map["success"]) {
-      global.updateCommands(commandListFromList(map["data"]));
-    } else {
-      snackBar(Get.context!, map["message"]);
-    }
-
+    global.updateCommands();
     local.fadeController.fadeIn();
   }
 }

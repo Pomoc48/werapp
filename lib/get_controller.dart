@@ -25,7 +25,6 @@ class GlobalController extends GetxController{
   final _stats = Rx<List<StatsData>?>(null);
   final _chart = Rx<List<ChartData>?>(null);
 
-  List<CommandLog>? get commandsLog => _commandsLog.value;
   List<Expense>? get expenses => _expenses.value;
   List<Command>? get commands => _commands.value;
 
@@ -121,8 +120,31 @@ class GlobalController extends GetxController{
     }
   }
 
-  updateCmdLog(List<CommandLog>? newData) => _commandsLog.value = newData;
-  updateCommands(List<Command>? newData) => _commands.value = newData;
+  // COMMAND LOGS
+  List<CommandLog>? get commandsLog => _commandsLog.value;
+
+  void updateCommandLogs() async {
+    Map map = await query(link: "command-log", type: RequestType.get);
+
+    if (map["success"]) {
+      _commandsLog.value = commandLogListFromList(map["data"]);
+    } else {
+      snackBar(Get.context!, map["message"]);
+    }
+  }
+
+  // COMMANDS
+
+  void updateCommands() async {
+    Map map = await query(link: "command", type: RequestType.get);
+
+    if (map["success"]) {
+      _commands.value = commandListFromList(map["data"]);
+    } else {
+      snackBar(Get.context!, map["message"]);
+    }
+  }
+  
   updateExpenses(List<Expense>? newData) => _expenses.value = newData;
   updatePending(int newInt) => _homeData.value?.pending = newInt;
 }

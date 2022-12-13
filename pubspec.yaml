@@ -3,7 +3,7 @@ description: The W.E.R.A. Project
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 2.36.6
+version: 2.36.7
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
