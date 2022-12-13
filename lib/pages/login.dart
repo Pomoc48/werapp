@@ -17,8 +17,6 @@ import 'package:wera_f2/widgets/profile_avatar.dart';
 import 'package:wera_f2/widgets/title.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(LoginPage());
-
 class LocalController extends GetxController{
   final FadeInController controller = FadeInController();
   bool _initial = true;

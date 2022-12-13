@@ -13,8 +13,6 @@ import 'package:wera_f2/widgets/numpad.dart';
 import 'package:wera_f2/widgets/padding.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(AddUser());
-
 class LocalController extends GetxController{
   final TextEditingController nameC = TextEditingController();
   final TextEditingController imageUrlC = TextEditingController();

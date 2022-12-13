@@ -12,8 +12,6 @@ import 'package:wera_f2/widgets/draw_chart.dart';
 import 'package:wera_f2/widgets/title_widget.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(ChartsPage());
-
 class LocalController extends GetxController{
   bool _initial = true;
   int chartDays = 30;

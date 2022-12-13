@@ -11,8 +11,6 @@ import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/cards/command_log.dart';
 
-void main() => runApp(CommandLogPage());
-
 class LocalController extends GetxController{
   bool _initial = true;
   final FadeInController controller = FadeInController();

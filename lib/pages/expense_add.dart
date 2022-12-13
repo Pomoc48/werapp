@@ -13,8 +13,6 @@ import 'package:wera_f2/widgets/input_container.dart';
 import 'package:wera_f2/widgets/padding.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(AddExpensePage());
-
 class LocalController extends GetxController{
   final gift = false.obs;
   final userId = Rx<int?>(null);

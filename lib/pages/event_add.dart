@@ -11,8 +11,6 @@ import 'package:wera_f2/widgets/input_container.dart';
 import 'package:wera_f2/widgets/padding.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(AddEventPage());
-
 class LocalController extends GetxController{
   final TextEditingController controller = TextEditingController();
 

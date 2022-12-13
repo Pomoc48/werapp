@@ -10,8 +10,6 @@ import 'package:wera_f2/widgets/create_card.dart';
 import 'package:wera_f2/widgets/title.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(DetailedEventPage());
-
 class LocalController extends GetxController{
   bool _initial = true;
   Event? event;

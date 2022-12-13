@@ -11,8 +11,6 @@ import 'package:wera_f2/widgets/input_container.dart';
 import 'package:wera_f2/widgets/padding.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(NewPriceListPage());
-
 class LocalController extends GetxController{
   bool initial = true;
   Command? passedItem;

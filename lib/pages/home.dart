@@ -19,8 +19,6 @@ import 'package:wera_f2/widgets/title.dart';
 import 'package:wera_f2/widgets/title_widget.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(HomePage());
-
 class LocalController extends GetxController{
   bool _initial = true;
   final FadeInController controller = FadeInController();

@@ -13,8 +13,6 @@ import 'package:wera_f2/widgets/dropdown.dart';
 import 'package:wera_f2/widgets/input_container.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(NewCommandPage());
-
 class LocalController extends GetxController{
   bool _initial = true;
 

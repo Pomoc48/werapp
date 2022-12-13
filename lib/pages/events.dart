@@ -11,8 +11,6 @@ import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/cards/event.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(EventsPage());
-
 class LocalController extends GetxController{
   bool _initial = true;
   final FadeInController controller = FadeInController();

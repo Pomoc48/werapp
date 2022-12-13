@@ -57,7 +57,6 @@ void main() async {
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.circularReveal,
       enableLog: false,
       title: PStrings.appName,
       theme: themeLight,

@@ -11,8 +11,6 @@ import 'package:wera_f2/cards/stats.dart';
 import 'package:wera_f2/widgets/title_widget.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(StatsPage());
-
 enum StatsType {
   totalPoints,
   usedCommands,

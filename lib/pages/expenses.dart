@@ -11,8 +11,6 @@ import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/cards/expense.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-void main() => runApp(ExpensesPage());
-
 class LocalController extends GetxController{
   bool _initial = true;
   final FadeInController controller = FadeInController();
