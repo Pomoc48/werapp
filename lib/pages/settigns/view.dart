@@ -1,83 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:wera_f2/classes/user.dart';
-import 'package:wera_f2/functions.dart';
-import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/layouts/layout.dart';
-import 'package:wera_f2/server_query.dart';
+import 'package:wera_f2/pages/settigns/controller.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/create_card.dart';
 import 'package:wera_f2/widgets/input_container.dart';
-import 'package:wera_f2/widgets/numpad.dart';
 import 'package:wera_f2/widgets/padding.dart';
 import 'package:wera_f2/widgets/title_widget.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-class LocalController extends GetxController{
-  bool _initial = true;
-  bool pinPicked = false;
-  User? user; 
-
-  Rx<Color?> themeColor = Rx<Color?>(null);
-  Rx<String?> themeColorName = Rx<String?>(null);
-
-  String pinStringInt = "";
-  final newPin = PStrings.clickUpdate.obs;
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController imageController = TextEditingController();
-
-  clearPin() => pinStringInt = "";
-  updatePin(number) => pinStringInt += number;
-
-  updateColor(Color color, String name) {
-    themeColor.value = color;
-    themeColorName.value = name;
-  }
-
-  runOnce(Function() fun) {
-    if (_initial) {
-      fun();
-      _initial = false;
-    }
-  }
-}
-
 class SettingsPage extends StatelessWidget {
   SettingsPage({super.key});
-
-  final GlobalController global = Get.find();
-  final LocalController local = LocalController();
+  
+  final SettingsController local = SettingsController();
 
   @override
   Widget build(BuildContext context) {
-
-    local.runOnce(() {
-      local.user = findUser(
-        id: global.userId!,
-        userList: global.homeData!.users,
-      );
-
-      local.nameController.text = local.user!.name;
-
-      if (local.user!.profileUrl != null) {
-        local.imageController.text = local.user!.profileUrl!;
-      }
-
-      String? themeColor = GetStorage().read("themeColor");
-      if (themeColor != null) {
-        local.themeColor.value = Color(int.parse(themeColor));
-        local.themeColorName.value = GetStorage().read("themeColorName");
-      }
-
-    });
+    local.runOnce();
 
     FloatingActionButton fab = FloatingActionButton.extended(
       heroTag: "main",
-      onPressed: _confirm,
+      onPressed: local.confirm,
       icon: const Icon(Icons.check),
       label: Text(PStrings.confirmFAB),
     );
@@ -103,10 +48,7 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
           ),
-          TitleWidget(
-            text: PStrings.themes,
-            child: _themeOptions(),
-          ),
+          TitleWidget(text: PStrings.themes, child: _themeOptions()),
         ],
       ),
     );
@@ -146,27 +88,7 @@ class SettingsPage extends StatelessWidget {
           child: InkWell(
             splashColor: PColors().inkWell(Get.context!),
             borderRadius: Settings.cardRadius,
-            onTap: () async {
-              local.clearPin();
-
-              showModalBottomSheet<void>(
-                context: Get.context!,
-                builder: (BuildContext context) {
-                  return Numpad(
-                    buttonInput: (String number) {
-                      local.updatePin(number);
-                      if (local.pinStringInt.length != 4) return;
-
-                      local.pinPicked = true;
-                      local.newPin.value = PStrings.pinHint;
-
-                      Get.back();
-                    },
-                    inputClear: local.clearPin,
-                  );
-                },
-              );
-            },
+            onTap: () async  => local.pinInput(),
             child: Obx(() => CreateCard(main: [local.newPin.value])),
           ),
         ),
@@ -291,10 +213,7 @@ class SettingsPage extends StatelessWidget {
     return InkWell(
       splashColor: PColors().inkWell(Get.context!),
       borderRadius: Settings.cardRadius,
-      onTap: () {
-        local.updateColor(color, name);
-        Get.back();
-      },
+      onTap: () => local.updateColor(color, name),
       child: PPadding(
         widget: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -305,57 +224,5 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _confirm() async {
-    String colorCut = local.themeColor.value.toString().substring(6, 16);
-
-    if (await GetStorage().read("themeColor") != colorCut) {
-      await GetStorage().write('themeColor', colorCut);
-      await GetStorage().write("themeColorName", local.themeColorName.value!);
-
-      if (Get.isDarkMode) {
-        Get.changeTheme(ThemeData(
-          useMaterial3: true,
-          colorSchemeSeed: local.themeColor.value,
-          brightness: Brightness.dark,
-        ));
-      } else {
-        Get.changeTheme(ThemeData(
-          useMaterial3: true,
-          colorSchemeSeed: local.themeColor.value,
-          brightness: Brightness.light,
-        ));
-      }
-
-      Get.changeThemeMode(ThemeMode.light);
-    }
-    
-    if (local.nameController.text == "") {
-      snackBar(Get.context!, PStrings.pickName);
-      return;
-    }
-
-    Map<String, dynamic> params;
-    if (local.pinPicked == true) {
-      params = {
-        "user_id": global.userId,
-        "name": local.nameController.text,
-        "pin": local.pinStringInt,
-        "profile_url": local.imageController.text.replaceAll("&", "%26"),
-      };
-    } else {
-      params = {
-        "user_id": global.userId,
-        "name": local.nameController.text,
-        "profile_url": local.imageController.text.replaceAll("&", "%26"),
-      };
-    }
-
-    loading(Get.context!);
-    Map map = await query(link: "user", type: RequestType.put, params: params);
-
-    loaded(Get.context!);
-    snackBar(Get.context!, map["message"]);
   }
 }
