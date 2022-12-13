@@ -43,7 +43,7 @@ class CommandLog {
   }
 }
 
-List<CommandLog> commandLogListFromList(dynamic list) {
+List<CommandLog> cmdLogListFromList(dynamic list) {
   List<CommandLog> dataList = [];
 
   for (Map element in list) {

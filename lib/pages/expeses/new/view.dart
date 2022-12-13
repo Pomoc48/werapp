@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wera_f2/classes/user.dart';
-import 'package:wera_f2/functions.dart';
-import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/layouts/layout.dart';
-import 'package:wera_f2/server_query.dart';
+import 'package:wera_f2/pages/expeses/new/controller.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/create_card.dart';
@@ -13,30 +11,17 @@ import 'package:wera_f2/widgets/input_container.dart';
 import 'package:wera_f2/widgets/padding.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-class LocalController extends GetxController{
-  final gift = false.obs;
-  final userId = Rx<int?>(null);
-
-  final textController = TextEditingController();
-  final priceController = TextEditingController();
-
-  void toggleCheck() => gift.value = gift.value ? false : true;
-  updateUserId(newInt) => userId.value = newInt;
-  updateUserIfNull(int newInt) => userId.value ??= newInt;
-}
-
 class AddExpensePage extends StatelessWidget {
   AddExpensePage({super.key});
-
-  final GlobalController global = Get.find();
-  final LocalController local = LocalController();
+  
+  final NewExpenseController local = NewExpenseController();
 
   @override
   Widget build(BuildContext context) {
 
     FloatingActionButton fab = FloatingActionButton.extended(
       heroTag: "main",
-      onPressed: () => _buttonPressed(),
+      onPressed: () => local.buttonPressed(),
       icon: const Icon(Icons.check),
       label: Text(PStrings.confirmFAB),
     );
@@ -69,7 +54,9 @@ class AddExpensePage extends StatelessWidget {
             widget: TextField(
               autofocus: true,
               controller: local.priceController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               style: PStyles().onSurface(Get.context!).bodyLarge,
               decoration: InputDecoration(
                 enabledBorder: Settings.noBorder,
@@ -86,7 +73,7 @@ class AddExpensePage extends StatelessWidget {
   Widget _userSelect() {
     return Obx(() => PDropdown(
       title: PStrings.recipient,
-      items: _displayUsers(global.homeData!.users),
+      items: _displayUsers(local.global.homeData!.users),
       value: local.userId.value,
       onChanged: local.updateUserId,
     ));
@@ -96,7 +83,7 @@ class AddExpensePage extends StatelessWidget {
     List<DropdownMenuItem> widgets = [];
 
     for (User user in users) {
-      if (user.id != global.userId) {
+      if (user.id != local.global.userId) {
         local.updateUserIfNull(user.id);
         widgets.add(dropdownMenuItem(user.id, user.name));
       } 
@@ -139,48 +126,5 @@ class AddExpensePage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void _buttonPressed() async {
-    if (local.priceController.text == "") {
-      snackBar(Get.context!, PStrings.pickExpense);
-      return;
-    }
-
-    loading(Get.context!);
-
-    late double money;
-
-    try {
-      money = double.parse(local.priceController.text);
-    } catch (e) {
-      try {
-        money = double.parse(local.priceController.text.replaceAll(',', '.'));
-      } catch (e) {
-        try {
-          money = int.parse(local.priceController.text).toDouble();
-        } catch (e) {
-          snackBar(Get.context!, PStrings.parseError);
-          return;
-        }
-      }
-    }
-
-    Map map = await query(
-      link: "expense",
-      type: RequestType.post,
-      params: {
-        "user_id": global.userId!,
-        "recipient_id": local.userId.value!,
-        "money": money,
-        "description": local.textController.text,
-        "gift": local.gift.value,
-      }
-    );
-
-    loaded(Get.context!);
-
-    snackBar(Get.context!, map["message"]);
-    if (map["success"]) Get.back();
   }
 }
