@@ -19,7 +19,7 @@ class ExpenseCard extends StatelessWidget {
 
   final Expense? expense;
   final FadeInController controller;
-  final Future<void> Function() refresh;
+  final void Function() refresh;
 
   @override
   Widget build(BuildContext context) {

@@ -9,13 +9,7 @@ import 'package:wera_f2/widgets/create_card.dart';
 import 'package:wera_f2/widgets/profile_avatar.dart';
 
 class CurrentPoints extends StatelessWidget {
-  const CurrentPoints({
-    Key? key,
-    required this.operation,
-  }) : super(key: key);
-
-  final void Function(User, bool) operation;
-
+  const CurrentPoints({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +51,8 @@ class CurrentPoints extends StatelessWidget {
         return InkWell(
           splashColor: PColors().inkWell(context),
           borderRadius: Settings.cardRadius,
-          onTap: () => operation(user, true),
-          onLongPress: () => operation(user, false),
+          onTap: () => global.pointOperation(user, true),
+          onLongPress: () => global.pointOperation(user, false),
           child: CreateCard(
             main: [
               drawUserTrophy(user),

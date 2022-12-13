@@ -8,12 +8,8 @@ import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/widgets/create_card.dart';
 
 class MoneyRatio extends StatelessWidget {
-  const MoneyRatio({
-    Key? key,
-    required this.refresh,
-  }) : super(key: key);
+  const MoneyRatio({Key? key}) : super(key: key);
 
-  final void Function(bool) refresh;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +84,7 @@ class MoneyRatio extends StatelessWidget {
         borderRadius: Settings.cardRadius,
         onTap: () async {
           await Navigator.pushNamed(context, Routes.newExpense);
-          refresh(true);
+          global.updateHomeData();
         },
         child: CreateCard(
           main: [

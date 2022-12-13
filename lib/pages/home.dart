@@ -7,7 +7,6 @@ import 'package:wera_f2/firebase_init.dart';
 import 'package:wera_f2/functions.dart';
 import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/layouts/layout.dart';
-import 'package:wera_f2/server_query.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/cards/event.dart';
@@ -40,7 +39,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     local.runOnce(() {
-      _getHome(true);
+      global.updateHomeData(local.controller);
       firebaseInit();
     });
 
@@ -49,11 +48,13 @@ class HomePage extends StatelessWidget {
       onPressed: () async {
         local.controller.fadeOut();
         await Navigator.pushNamed(context, Routes.newCommand);
-        _getHome(true);
+        global.updateHomeData(local.controller);
       },
       label: Text(PStrings.newCommandFAB),
       icon: const Icon(Icons.grade),
     );
+
+    void Function([FadeInController?]) refresh = global.updateHomeData;
 
     return PLayout(
       title: PStrings.appName,
@@ -62,25 +63,25 @@ class HomePage extends StatelessWidget {
       logoutConfirm: true,
       scrollable: true,
       fadeController: local.controller,
-      onRefresh: () => _getHome(true),
+      onRefresh: () async => refresh(local.controller),
       welcome: Obx(() => _getTitle(global.homeData, global.userId!)),
       child: WidgetFromList(
         contextWidth: context.width,
         children: [
           TitleWidget(
             text: PStrings.currentPoints,
-            child: CurrentPoints(operation: _pointOperation),
+            child: const CurrentPoints(),
           ),
           TitleWidget(
             text: PStrings.moneyIndicator,
-            child: MoneyRatio(refresh: _getHome),
+            child: const MoneyRatio(),
           ),
           TitleWidget(
             text: PStrings.upcomingEvent,
             child: Obx(() => EventCard(
               event: global.homeData?.event,
               controller: local.controller,
-              refresh: () => _getHome(true),
+              refresh: () => refresh(local.controller),
             )),
           ),
           TitleWidget(
@@ -88,7 +89,7 @@ class HomePage extends StatelessWidget {
             child: Obx(() => ExpenseCard(
               expense: global.homeData?.expense,
               controller: local.controller,
-              refresh: (() => _getHome(true)),
+              refresh: () => refresh(local.controller),
             )),
           ),
           TitleWidget(
@@ -96,7 +97,7 @@ class HomePage extends StatelessWidget {
             child: Obx(() => CommandLogCard(
               cmdLog: global.homeData?.commandLog,
               controller: local.controller,
-              refresh: (() => _getHome(true)),
+              refresh: () => refresh(local.controller),
             )),
           ),
         ],
@@ -110,34 +111,5 @@ class HomePage extends StatelessWidget {
       return PTitle(message: "${PStrings.welcome} ${currentUser.name}!");
     }
     return const SizedBox();
-  }
-
-  Future<void> _pointOperation(User user, bool add) async {
-    Map map = add ? await user.addPoint() : await user.removePoint();
-
-    if (map["success"]) {
-      await _getHome(false);
-    } else {
-      snackBar(Get.context!, map["message"]);
-      await _getHome(true);
-    }
-  }
-
-  Future<void> _getHome(bool redraw) async {
-    if (redraw) local.controller.fadeOut();
-
-    Map map = await query(
-      link: "home",
-      type: RequestType.get,
-      params: {"user_id": global.userId!},
-    );
-
-    if (map["success"]) {
-      global.updateHomeData(getHomeDataMap(map["data"]));
-    } else {
-      snackBar(Get.context!, map["message"]);
-    }
-
-    local.controller.fadeIn();
   }
 }
