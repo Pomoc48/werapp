@@ -15,9 +15,9 @@ import 'package:wera_f2/pages/login/view.dart';
 import 'package:wera_f2/pages/new_command.dart';
 import 'package:wera_f2/pages/new_price_list.dart';
 import 'package:wera_f2/pages/price_list.dart';
-import 'package:wera_f2/pages/setup.dart';
+import 'package:wera_f2/pages/setup/view.dart';
 import 'package:wera_f2/pages/settings.dart';
-import 'package:wera_f2/pages/stats.dart';
+import 'package:wera_f2/pages/stats/view.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 

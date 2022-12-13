@@ -29,7 +29,6 @@ class GlobalController extends GetxController{
   List<Expense>? get expenses => _expenses.value;
   List<Command>? get commands => _commands.value;
   List<Event>? get events => _events.value;
-  List<StatsData>? get stats => _stats.value;
 
   updateBackend(String newBackend) => backend = newBackend;
 
@@ -97,10 +96,22 @@ class GlobalController extends GetxController{
     }
   }
 
+  // STATS
+  List<StatsData>? get stats => _stats.value;
+  
+  void updateStats() async {
+    Map map = await query(link: "stats", type: RequestType.get);
+
+    if (map["success"]) {
+      _stats.value = statsDataListFromList(map["data"]);
+    } else {
+      snackBar(Get.context!, map["message"]);
+    }
+  }
+
   updateCmdLog(List<CommandLog>? newData) => _commandsLog.value = newData;
   updateCommands(List<Command>? newData) => _commands.value = newData;
   updateEvents(List<Event>? newData) => _events.value = newData;
-  updateStats(List<StatsData>? newData) => _stats.value = newData;
   updateExpenses(List<Expense>? newData) => _expenses.value = newData;
   updatePending(int newInt) => _homeData.value?.pending = newInt;
 }

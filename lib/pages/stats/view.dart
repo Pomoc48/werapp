@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get.dart';
 import 'package:wera_f2/classes/stats_data.dart';
-import 'package:wera_f2/functions.dart';
-import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/layouts/layout.dart';
-import 'package:wera_f2/server_query.dart';
+import 'package:wera_f2/pages/stats/controller.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/cards/stats.dart';
 import 'package:wera_f2/widgets/title_widget.dart';
@@ -19,27 +16,14 @@ enum StatsType {
   transactions,
 }
 
-class LocalController extends GetxController{
-  bool _initial = true;
-  final FadeInController controller = FadeInController();
-
-  runOnce(Function() fun) {
-    if (_initial) {
-      fun();
-      _initial = false;
-    }
-  }
-}
-
 class StatsPage extends StatelessWidget {
   StatsPage({super.key});
 
-  final GlobalController global = Get.find();
-  final LocalController local = LocalController();
+  final StatsController local = StatsController();
 
   @override
   Widget build(BuildContext context) {
-    local.runOnce(() => _getStats());
+    local.runOnce(() => local.getStats());
 
     return PLayout(
       title: PStrings.stats,
@@ -47,10 +31,10 @@ class StatsPage extends StatelessWidget {
       scrollable: true,
       logoutConfirm: true,
       fadeController: local.controller,
-      onRefresh: () async => _getStats(),
+      onRefresh: () async => local.getStats(),
       child: Obx(() => WidgetFromList(
         contextWidth: context.width,
-        children: _main(global.stats),
+        children: _main(local.global.stats),
       )),
     );
   }
@@ -72,7 +56,7 @@ class StatsPage extends StatelessWidget {
 
     switch (type) {
       case StatsType.totalPoints:
-        for (StatsData statsData in global.stats!) {
+        for (StatsData statsData in local.global.stats!) {
           mapList.add([statsData.userId, statsData.totalPoints]);
         }
 
@@ -80,7 +64,7 @@ class StatsPage extends StatelessWidget {
         break;
 
       case StatsType.usedCommands:
-        for (StatsData statsData in global.stats!) {
+        for (StatsData statsData in local.global.stats!) {
           mapList.add([statsData.userId, statsData.usedCommands]);
         }
 
@@ -88,7 +72,7 @@ class StatsPage extends StatelessWidget {
         break;
 
       case StatsType.usedPoints:
-        for (StatsData statsData in global.stats!) {
+        for (StatsData statsData in local.global.stats!) {
           mapList.add([statsData.userId, statsData.usedPoints]);
         }
 
@@ -96,7 +80,7 @@ class StatsPage extends StatelessWidget {
         break;
 
       case StatsType.giftedMoney:
-        for (StatsData statsData in global.stats!) {
+        for (StatsData statsData in local.global.stats!) {
           mapList.add([statsData.userId, statsData.giftedMoney]);
         }
 
@@ -104,7 +88,7 @@ class StatsPage extends StatelessWidget {
         break;
 
       case StatsType.transactions:
-        for (StatsData statsData in global.stats!) {
+        for (StatsData statsData in local.global.stats!) {
           mapList.add([statsData.userId, statsData.transactions]);
         }
 
@@ -113,18 +97,5 @@ class StatsPage extends StatelessWidget {
     }
 
     return TitleWidget(text: title, child: StatsCard(mapList: mapList));
-  }
-
-  Future<void> _getStats() async {
-    local.controller.fadeOut();
-    Map map = await query(link: "stats", type: RequestType.get);
-
-    if (map["success"]) {
-      global.updateStats(statsDataListFromList(map["data"]));
-    } else {
-      snackBar(Get.context!, map["message"]);
-    }
-
-    local.controller.fadeIn();
   }
 }
