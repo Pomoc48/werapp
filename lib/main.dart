@@ -5,9 +5,9 @@ import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/pages/charts/view.dart';
 import 'package:wera_f2/pages/command_logs.dart';
 import 'package:wera_f2/pages/create_user.dart';
-import 'package:wera_f2/pages/event_add.dart';
-import 'package:wera_f2/pages/event_detail.dart';
-import 'package:wera_f2/pages/events.dart';
+import 'package:wera_f2/pages/events/add/view.dart';
+import 'package:wera_f2/pages/events/view/view.dart';
+import 'package:wera_f2/pages/events/list/view.dart';
 import 'package:wera_f2/pages/expense_add.dart';
 import 'package:wera_f2/pages/expenses.dart';
 import 'package:wera_f2/pages/home/view.dart';
@@ -24,6 +24,7 @@ import 'package:wera_f2/strings.dart';
 void main() async {
   Get.put(GlobalController());
   await GetStorage.init();
+  
   String? themeColor = GetStorage().read("themeColor");
 
   ThemeData themeDark = ThemeData(
