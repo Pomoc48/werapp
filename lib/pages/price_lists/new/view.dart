@@ -1,37 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wera_f2/classes/command.dart';
-import 'package:wera_f2/functions.dart';
-import 'package:wera_f2/get_controller.dart';
 import 'package:wera_f2/layouts/layout.dart';
-import 'package:wera_f2/server_query.dart';
+import 'package:wera_f2/pages/price_lists/new/controller.dart';
 import 'package:wera_f2/settings.dart';
 import 'package:wera_f2/strings.dart';
 import 'package:wera_f2/widgets/input_container.dart';
 import 'package:wera_f2/widgets/padding.dart';
 import 'package:wera_f2/widgets/widget_from_list.dart';
 
-class LocalController extends GetxController{
-  bool initial = true;
-  Command? passedItem;
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController priceController = TextEditingController();
-
-  updateInit() => initial = false;
-
-  updateItem(Command item) {
-    passedItem = item;
-    nameController.text = item.name;
-    priceController.text = item.cost.toString();
-  }
-}
-
 class NewPriceListPage extends StatelessWidget {
   NewPriceListPage({super.key});
-
-  final GlobalController global = Get.find();
-  final LocalController local = LocalController();
+  
+  final NewPriceListController local = NewPriceListController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +30,7 @@ class NewPriceListPage extends StatelessWidget {
 
     FloatingActionButton fab = FloatingActionButton.extended(
       heroTag: "main",
-      onPressed: () => _addUpdate(local.passedItem == null),
+      onPressed: () => local.addUpdate(local.passedItem == null),
       icon: const Icon(Icons.check),
       label: Text(PStrings.confirmFAB),
     );
@@ -81,7 +62,7 @@ class NewPriceListPage extends StatelessWidget {
   }
 
   List<Widget> _main() {
-    if (global.commands == null) return [];
+    if (local.global.commands == null) return [];
     return [_nameInput(), _priceInput()];
   }
 
@@ -135,7 +116,7 @@ class NewPriceListPage extends StatelessWidget {
     );
   }
 
-  Future<void> _delete() async {
+  void _delete() async {
     showDialog(
       context: Get.context!,
       builder: (BuildContext context) {
@@ -148,62 +129,12 @@ class NewPriceListPage extends StatelessWidget {
               child: Text(PStrings.no),
             ),
             TextButton(
-              onPressed: () async {
-                loading(Get.context!);
-                Map map = await local.passedItem!.remove();
-                loaded(Get.context!);
-
-                snackBar(Get.context!, map["message"]);
-                Get.back();
-                Get.back();
-              },
+              onPressed: () async => local.deletePrice(),
               child: Text(PStrings.yes),
             ),
           ],
         );
       },
     );
-  }
-
-  Future<void> _addUpdate(bool add) async {
-    if (local.nameController.text == "" || local.priceController.text == "") {
-      snackBar(Get.context!, PStrings.pickAllFields);
-      return;
-    }
-
-    loading(Get.context!);
-
-    int cost;
-    try {
-      cost = int.parse(local.priceController.text);
-    } catch (e) {
-      snackBar(Get.context!, PStrings.parseErrorInt);
-      return;
-    }
-
-    Map map;
-    if (add) {
-      map = await query(
-        link: "command",
-        type: RequestType.post,
-        params: {
-          "name": local.nameController.text,
-          "cost": cost,
-          "user_id": global.userId!,
-        },
-      );
-
-    } else {
-      map = await local.passedItem!.update(
-        newName: local.nameController.text,
-        newCost: cost,
-        newUserId: global.userId!,
-      );
-    }
-
-    loaded(Get.context!);
-
-    snackBar(Get.context!, map["message"]);
-    if (map["success"]) Get.back();
   }
 }
