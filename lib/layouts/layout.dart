@@ -51,7 +51,7 @@ class PLayout extends StatelessWidget {
             Scaffold(
               appBar: appbar,
               floatingActionButton: fab,
-              drawer: drawer ? const PDrawer() : null,
+              drawer: drawer ? const PDrawer(mobile: true) : null,
               body: FadeIn(
                 controller: fadeController,
                 child: MobileView(

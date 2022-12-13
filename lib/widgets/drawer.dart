@@ -7,9 +7,10 @@ import 'package:wera_f2/widgets/divider.dart';
 import 'package:wera_f2/widgets/padding.dart';
 
 class PDrawer extends StatelessWidget {
-  const PDrawer({super.key, this.fab});
+  const PDrawer({super.key, this.fab, this.mobile = false});
 
   final Widget? fab;
+  final bool mobile;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +82,7 @@ class PDrawer extends StatelessWidget {
               borderRadius: Settings.fullRadius,
               color: backgroundColor,
             ),
-            height: 48,
+            height: mobile ? 56 : 48,
             child: Row(children: drawItems()),
           ),
         ),
@@ -100,6 +101,9 @@ class PDrawer extends StatelessWidget {
       return const SizedBox();
     }
 
+    double marginSize = Settings.pagePadding;
+    if (mobile) marginSize = marginSize * 2;
+
     return Drawer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +113,7 @@ class PDrawer extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                SizedBox(height: Settings.pagePadding),
+                SizedBox(height: marginSize),
                 listSection("Main"),
                 listTile(
                   iconData: Icons.home,
